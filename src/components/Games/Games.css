@@ -1,0 +1,98 @@
+
+.gameSection {
+  margin-left: 200px;
+  padding: 20px;
+  color: white;
+}
+
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.goBtn {
+  font-size: 24px;
+  background: transparent;
+  color: white;
+  border: 1px solid #666;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.goBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+
+.gameGrid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+}
+
+
+.gameCard {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  transition: 0.2s;
+}
+
+.gameCard:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+.gameImg {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
+.gameInfo h3 {
+  margin: 10px 0 6px 0;
+  font-size: 18px;
+}
+
+.gameInfo p {
+  font-size: 12px;
+  opacity: 0.7;
+  height: 35px;
+  overflow: hidden;
+}
+
+
+.gameBottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.buyBtn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.buyBtn:hover {
+  background: #3aa3ff;
+  color: #fff;
+}

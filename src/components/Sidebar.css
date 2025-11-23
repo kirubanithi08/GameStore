@@ -1,0 +1,130 @@
+/* Sidebar Container */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  /* width: 220px; */
+  width: 156px;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.85);
+  /* border-right: 1px solid rgba(255, 255, 255, 0.1); */
+
+  backdrop-filter: blur(12px);
+  z-index: 2000;
+}
+
+/* Logo */
+.logo {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3aa3ff;
+}
+
+.logo span {
+  color: white;
+}
+
+/* Navigation */
+.sidebar-nav ul {
+  padding: 0;
+  margin-top: 30px;
+}
+
+.sidebar-nav li {
+  list-style: none;
+  margin-bottom: 12px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 15px;
+
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 15px;
+
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+.nav-link i {
+  font-size: 18px;
+}
+
+/* Hover + Active */
+.nav-link:hover,
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+/* Auth Buttons */
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.login-btn,
+.register-btn {
+  padding: 10px 0;
+  border-radius: 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.login-btn {
+  background: #fff;
+  color: black;
+}
+
+.login-btn:hover {
+  opacity: 0.85;
+}
+
+.register-btn:hover {
+  background: #fff;
+  color: black;
+}
+
+/* Responsive Sidebar (Mobile) */
+@media (max-width: 750px) {
+  .sidebar {
+    width: 65px;
+    padding: 15px;
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .auth-actions button {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+}

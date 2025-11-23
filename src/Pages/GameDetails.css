@@ -1,0 +1,156 @@
+/* PAGE WRAPPER */
+.gameDetails {
+  color: white;
+  width: 100%;
+  padding-bottom: 60px;
+  background: #0d0d0d;
+  min-height: 100vh;
+}
+
+/* TOP BANNER */
+.gameBanner {
+  width: 100%;
+  height: 330px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.bannerOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0d0d0d, transparent);
+}
+
+/* MAIN CONTENT */
+.gameContent {
+  display: flex;
+  gap: 40px;
+  margin-top: -120px; /* Pull up over banner */
+  padding: 0 50px;
+  position: relative;
+  z-index: 5;
+}
+
+/* LEFT COVER ART */
+.leftCover img {
+  width: 280px;
+  height: 400px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
+}
+
+/* RIGHT INFO */
+.rightInfo {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameTitle {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+/* GENRES */
+.genres {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+}
+
+.genres span {
+  background: rgba(255,255,255,0.12);
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+}
+
+/* DESCRIPTION */
+.description {
+  font-size: 15px;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 90%;
+}
+
+/* PRICE + BUTTONS ROW */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4fd1ff;
+}
+
+/* BUTTONS */
+.buyBtn,
+.wishBtn {
+  padding: 12px 35px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.25s ease;
+}
+
+/* BUY */
+.buyBtn {
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  color: white;
+}
+
+.buyBtn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Wishlist */
+.wishBtn {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.wishBtn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* SCREENSHOTS SECTION */
+.screenshotsSection {
+  margin-top: 60px;
+  padding: 0 50px;
+}
+
+.screenshotsSection h2 {
+  margin-bottom: 20px;
+  color: #4fd1ff;
+}
+
+.screenshots {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.screenshots img {
+  width: 280px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: 0.25s ease;
+}
+
+.screenshots img:hover {
+  transform: scale(1.05);
+}
