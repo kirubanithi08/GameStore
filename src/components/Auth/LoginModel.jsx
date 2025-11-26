@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Modal from "../UI/Model";
+import Modal from "./Model";
 import { login } from "../../api/auth";
 import "../Auth/AuthModel.css";
 
-export default function LoginModal({ onClose }) {
+export default function LoginModal({ onClose, onSuccess }) { // <-- add onSuccess
   const [form, setForm] = useState({ username: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "" });
 
@@ -13,7 +13,12 @@ export default function LoginModal({ onClose }) {
     try {
       const { data } = await login(form);
 
+      // Store token
       localStorage.setItem("accessToken", data.accessToken);
+
+      // Call onSuccess with user info (adjust if API returns more user details)
+      onSuccess({ name: data.username || form.username });
+
       onClose();
     } catch (err) {
       setStatus({
@@ -26,7 +31,6 @@ export default function LoginModal({ onClose }) {
   return (
     <Modal onClose={onClose}>
       <h2 className="modal-title">Login</h2>
-
       <div className="modal-group">
         <label>Username</label>
         <input
@@ -38,7 +42,6 @@ export default function LoginModal({ onClose }) {
           placeholder="Enter username"
         />
       </div>
-
       <div className="modal-group">
         <label>Password</label>
         <input
@@ -50,9 +53,7 @@ export default function LoginModal({ onClose }) {
           placeholder="Enter password"
         />
       </div>
-
       {status.error && <p className="error-text">{status.error}</p>}
-
       <button className="submit-btn" onClick={handleLogin} disabled={status.loading}>
         {status.loading ? "Logging in..." : "Login"}
       </button>

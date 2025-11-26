@@ -5,7 +5,7 @@ import Home from "./Routes/Home"
 import Games from "./Routes/Games";
 import Buys from "./Routes/Buys"
 import WishList from "./Routes/WishList"
-
+import Dashboard from "./Routes/Dashboard"
 import GameDetails from "./Pages/GameDetails";
 
 
@@ -20,7 +20,7 @@ function App() {
          <Route path="/games" element={<Games />} />
         <Route path="/buys" element={<Buys />} />
         <Route path="/wishList" element={<WishList />} />
-        
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/game/:id" element={<GameDetails />} />
 
       </Routes>

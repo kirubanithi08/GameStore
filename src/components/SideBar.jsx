@@ -1,69 +1,69 @@
-// import "./SideBarStyle.css";
+
+
 // import { NavLink } from "react-router-dom";
 // import { useState } from "react";
 
 // import LoginModal from "../components/Auth/LoginModel";
 // import RegisterModal from "../components/Auth/RegisterModel";
+// import "./Sidebar.css";
 
 // const sidebarItems = [
 //   { label: "Home", link: "/", icon: "fa-solid fa-house" },
-//   { label: "Games", link: "/Games", icon: "fas fa-gamepad" },
-//   { label: "Wishlist", link: "/wishList", icon: "fa-solid fa-heart" },
-//   { label: "Buys", link: "/buys", icon: "fa-solid fa-bag-shopping" }
+//   { label: "Games", link: "/games", icon: "fas fa-gamepad" },
+//   { label: "Wishlist", link: "/wishlist", icon: "fa-solid fa-heart" },
+//   { label: "Purchases", link: "/buys", icon: "fa-solid fa-bag-shopping" },
+//   { label: "Dashboard", link: "/dashboard", icon: "fas fa-gamepad" },
 // ];
 
-// function SideBar() {
+// export default function Sidebar() {
 //   const [showLogin, setShowLogin] = useState(false);
 //   const [showRegister, setShowRegister] = useState(false);
 
 //   return (
-//     <div className="sidebar">
+//     <>
+//       <aside className="sidebar">
 
       
-//       <div className="top-section">
-        
-//         <h1>
-//           G-<span>Store</span>:
-//         </h1>
+//         <div className="sidebar-header">
+//           <h1 className="logo">G<span>Store</span></h1>
+//         </div>
 
-//         <nav className="navbar">
+       
+//         <nav className="sidebar-nav">
 //           <ul>
 //             {sidebarItems.map((item, index) => (
-//               <li className="items" key={index}>
-//                 <NavLink to={item.link} className="link">
+//               <li key={index}>
+//                 <NavLink
+//                   to={item.link}
+//                   className={({ isActive }) =>
+//                     isActive ? "nav-link active" : "nav-link"
+//                   }
+//                 >
 //                   <i className={item.icon}></i>
-//                   {item.label}
+//                   <span>{item.label}</span>
 //                 </NavLink>
 //               </li>
 //             ))}
 //           </ul>
 //         </nav>
-//       </div>
+
+       
+//         <div className="auth-actions">
+//           <button className="login-btn" onClick={() => setShowLogin(true)}>
+//             Login
+//           </button>
+//           <button className="register-btn" onClick={() => setShowRegister(true)}>
+//             Register
+//           </button>
+//         </div>
+//       </aside>
 
       
-//       <div className="auth-buttons">
-//         <div className="loginBtn" onClick={() => setShowLogin(true)}>
-//           Login
-//         </div>
-//         <div className="registerBtn" onClick={() => setShowRegister(true)}>
-//           Register
-//         </div>
-//       </div>
-
-     
 //       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
 //       {showRegister && <RegisterModal onClose={() => setShowRegister(false)} />}
-//     </div>
+//     </>
 //   );
 // }
-
-// export default SideBar;
-
-
-
-
-
-
 
 
 import { NavLink } from "react-router-dom";
@@ -78,16 +78,34 @@ const sidebarItems = [
   { label: "Games", link: "/games", icon: "fas fa-gamepad" },
   { label: "Wishlist", link: "/wishlist", icon: "fa-solid fa-heart" },
   { label: "Purchases", link: "/buys", icon: "fa-solid fa-bag-shopping" },
+  { label: "Dashboard", link: "/dashboard", icon: "fas fa-gamepad" },
 ];
 
 export default function Sidebar() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
+  // NEW: user state
+  const [user, setUser] = useState(null); // e.g., { name: "John Doe" }
+
+  const handleLogout = () => {
+    setUser(null);
+    // TODO: call API logout or clear token
+  };
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    setShowLogin(false);
+  };
+
+  const handleRegisterSuccess = (userData) => {
+    setUser(userData);
+    setShowRegister(false);
+  };
+
   return (
     <>
       <aside className="sidebar">
-
         {/* Logo */}
         <div className="sidebar-header">
           <h1 className="logo">G<span>Store</span></h1>
@@ -112,20 +130,46 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        {/* Auth Buttons */}
+        {/* Auth Buttons / Profile */}
         <div className="auth-actions">
-          <button className="login-btn" onClick={() => setShowLogin(true)}>
-            Login
-          </button>
-          <button className="register-btn" onClick={() => setShowRegister(true)}>
-            Register
-          </button>
+          {!user ? (
+            <>
+              <button className="login-btn" onClick={() => setShowLogin(true)}>
+                Login
+              </button>
+              <button className="register-btn" onClick={() => setShowRegister(true)}>
+                Register
+              </button>
+            </>
+          ) : (
+            <div className="profile-box">
+              <span>👤 {user.name}</span>
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
       {/* Modals */}
-      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
-      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} />}
+      {/* {showLogin && <LoginModal onClose={() => setShowLogin(false)} onSuccess={handleLoginSuccess} />}
+      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onSuccess={handleRegisterSuccess} />} */}
+
+
+      {showLogin && (
+  <LoginModal
+    onClose={() => setShowLogin(false)}
+    onSuccess={handleLoginSuccess} // <-- pass user info back
+  />
+)}
+{showRegister && (
+  <RegisterModal
+    onClose={() => setShowRegister(false)}
+    onSuccess={handleRegisterSuccess} // <-- pass user info back
+  />
+)}
+
     </>
   );
 }

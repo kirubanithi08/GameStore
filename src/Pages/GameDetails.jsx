@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./GameDetails.css";
 
-function GameDetails() {
+export default function GameDetails() {
   const { id } = useParams();
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ function GameDetails() {
   useEffect(() => {
     async function fetchGame() {
       try {
-        const res = await fetch(`https://your-backend.com/api/games/${id}`);
+        const res = await fetch(`https://game-store-6uwt.onrender.com/api/games/${id}`);
         const data = await res.json();
         setGame(data);
       } catch (err) {
@@ -23,31 +23,34 @@ function GameDetails() {
     fetchGame();
   }, [id]);
 
-  if (loading) return <div className="loading">Loading…</div>;
+  if (loading) return <SkeletonGameDetails />;
+
   if (!game) return <div className="notFound">Game Not Found</div>;
 
   return (
-    <div className="gameDetails">
+    <div className="gameDetailsPage">
 
-      {/* Background Banner */}
+      {/* Banner */}
       <div
         className="gameBanner"
-        style={{ backgroundImage: `url(${game.cover})` }}
+        style={{ backgroundImage: `url(${game.img})` }}
       >
-        <div className="bannerOverlay"></div>
+        <div className="bannerFade"></div>
       </div>
 
-      {/* Game Info Panel */}
-      <div className="gameContent">
-        
-        <div className="leftCover">
+      {/* Content Panel */}
+      <div className="gameMainContent">
+
+        {/* LEFT — Cover */}
+        <div className="coverCard">
           <img src={game.cover} alt={game.title} />
         </div>
 
-        <div className="rightInfo">
-          <h1 className="gameTitle">{game.title}</h1>
+        {/* RIGHT — Info */}
+        <div className="infoPanel">
+          <h1 className="title">{game.title}</h1>
 
-          <div className="genres">
+          <div className="genreList">
             {game.genre?.map((g, i) => (
               <span key={i}>{g}</span>
             ))}
@@ -55,30 +58,50 @@ function GameDetails() {
 
           <p className="description">{game.description}</p>
 
-          <div className="bottomRow">
+          <div className="purchaseRow">
             <h2 className="price">${game.price}</h2>
-
             <button className="buyBtn">Buy Now</button>
-            <button className="wishBtn">❤️ Wishlist</button>
+            <button className="wishlistBtn">❤️ Wishlist</button>
           </div>
         </div>
       </div>
 
-      {/* Screenshots Section */}
+      {/* Screenshots */}
       {game.screenshots?.length > 0 && (
         <div className="screenshotsSection">
           <h2>Screenshots</h2>
 
           <div className="screenshots">
             {game.screenshots.map((shot, i) => (
-              <img key={i} src={shot} alt={`screenshot ${i}`} />
+              <img key={i} src={shot} alt={`Screenshot ${i + 1}`} />
             ))}
           </div>
         </div>
       )}
-
     </div>
   );
 }
 
-export default GameDetails;
+/* -------------------------
+   ⭐ Skeleton Loader
+--------------------------*/
+function SkeletonGameDetails() {
+  return (
+    <div className="gameDetailsPage">
+
+      <div className="gameBanner skeleton"></div>
+
+      <div className="gameMainContent">
+        <div className="coverCard skeletonBox"></div>
+
+        <div className="infoPanel">
+          <div className="skeletonText titleSkeleton"></div>
+          <div className="skeletonText shortSkeleton"></div>
+          <div className="skeletonText longSkeleton"></div>
+
+          <div className="skeletonBtn"></div>
+        </div>
+      </div>
+    </div>
+  );
+}

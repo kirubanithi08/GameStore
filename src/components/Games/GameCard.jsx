@@ -15,11 +15,11 @@ export default function GameCard({ game }) {
         <h3>{game.title}</h3>
 
         
-        <div className="genres">
+        {/* <div className="genres">
           {game.genre.map((g, i) => (
             <span key={i} className="genreTag">{g}</span>
           ))}
-        </div>
+        </div> */}
 
         <p>{game.description}</p>
       </div>

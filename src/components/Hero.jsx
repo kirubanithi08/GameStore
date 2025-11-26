@@ -1,26 +1,3 @@
-
-
-// import React from 'react';
-// import "./Hero.css";
-// import Search from '../components/Search';
-// import HeroSlider from '../components/HeroSlider';
-// import { gameData } from '../Data/GameData';
-
-// function Hero() {
-//   return (
-//     <div className='hero'>
-//       <HeroSlider slides={gameData} />
-
-//       <Search />
-//     </div>
-//   );
-// }
-
-// export default Hero;
-
-
-
-// src/components/Hero.js
 import React, { useEffect, useState } from "react";
 import "./Hero.css";
 import Search from './Search';
@@ -34,16 +11,22 @@ function Hero() {
   useEffect(() => {
     fetchFeaturedGames()
       .then((res) => {
-        // Map backend response to the format HeroSlider expects
+        if (!res.data || !Array.isArray(res.data)) return;
+
         const formatted = res.data.map(game => ({
-          id: game.id,
-          title: game.name,
-          text: game.description,
-          img: game.imgUrl,
-          genre: game.genres.map(g => g.name),
-          prize: `$${game.prize}`
+          id: game.id || "",
+          title: game.name || "Untitled Game",
+          text: game.description || "",
+          img: game.img || "",
+          genre: Array.isArray(game.genres) ? game.genres.map(g => g.name) : [],
+          prize: game.price != null ? `$${game.price}` : "N/A",
         }));
+
         setSlides(formatted);
+      })
+      .catch((err) => {
+        console.error("Error fetching featured games:", err);
+        setSlides([]);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -59,4 +42,3 @@ function Hero() {
 }
 
 export default Hero;
-

@@ -30,7 +30,7 @@ export default function Search() {
       const formatted = res.data.map(game => ({
         id: game.id,
         title: game.name,
-        img: game.imgUrl,
+        img: game.img,
         genre: game.genres.map(g => g.name)
       }));
       setResults(formatted);
@@ -43,8 +43,8 @@ export default function Search() {
 
   const handleNavigate = (id) => {
     navigate(`/game/${id}`);
-    setQuery("");      // Clear search input
-    setResults([]);    // Close dropdown
+    setQuery("");      
+    setResults([]);    
   };
 
   return (
@@ -57,7 +57,7 @@ export default function Search() {
         onChange={(e) => setQuery(e.target.value)}
       />
 
-      {/* Dropdown results */}
+      
       {query && results.length > 0 && (
         <div className="searchDropdown">
           {results.map((game) => (
@@ -76,7 +76,7 @@ export default function Search() {
         </div>
       )}
 
-      {/* No results */}
+      
       {query && !loading && results.length === 0 && (
         <div className="searchDropdown noResults">
           No games found

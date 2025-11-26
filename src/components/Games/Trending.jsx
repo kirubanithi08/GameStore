@@ -15,9 +15,9 @@ export default function Trending() {
         const formatted = res.data.map(game => ({
           id: game.id,
           title: game.name,
-          img: game.imgUrl,
+          img: game.img,
           description: game.description,
-          prize: `$${game.prize}`,
+          prize: `$${game.price}`,
           genre: game.genres.map(g => g.name)
         }));
         setGames(formatted);
