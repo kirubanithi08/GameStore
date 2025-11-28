@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Modal from "./Model";
-import { login } from "../../api/auth";
+import { loginUser } from "../../api/auth";
+import { useAuth } from "../../Context/AuthContext";
 import "../Auth/AuthModel.css";
 
-export default function LoginModal({ onClose, onSuccess }) { // <-- add onSuccess
+export default function LoginModal({ onClose }) {
+  const { login } = useAuth();
   const [form, setForm] = useState({ username: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "" });
 
@@ -11,13 +13,13 @@ export default function LoginModal({ onClose, onSuccess }) { // <-- add onSucces
     setStatus({ loading: true, error: "" });
 
     try {
-      const { data } = await login(form);
+      const { data } = await loginUser(form);
 
-      // Store token
-      localStorage.setItem("accessToken", data.accessToken);
-
-      // Call onSuccess with user info (adjust if API returns more user details)
-      onSuccess({ name: data.username || form.username });
+      // call global login function
+      login(data.accessToken, {
+        username: data.username,
+        role: data.role,
+      });
 
       onClose();
     } catch (err) {
@@ -31,6 +33,7 @@ export default function LoginModal({ onClose, onSuccess }) { // <-- add onSucces
   return (
     <Modal onClose={onClose}>
       <h2 className="modal-title">Login</h2>
+
       <div className="modal-group">
         <label>Username</label>
         <input
@@ -42,6 +45,7 @@ export default function LoginModal({ onClose, onSuccess }) { // <-- add onSucces
           placeholder="Enter username"
         />
       </div>
+
       <div className="modal-group">
         <label>Password</label>
         <input
@@ -53,8 +57,14 @@ export default function LoginModal({ onClose, onSuccess }) { // <-- add onSucces
           placeholder="Enter password"
         />
       </div>
+
       {status.error && <p className="error-text">{status.error}</p>}
-      <button className="submit-btn" onClick={handleLogin} disabled={status.loading}>
+
+      <button
+        className="submit-btn"
+        onClick={handleLogin}
+        disabled={status.loading}
+      >
         {status.loading ? "Logging in..." : "Login"}
       </button>
     </Modal>

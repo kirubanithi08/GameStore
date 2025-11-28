@@ -1,17 +1,17 @@
 
 
 import { useEffect, useState } from "react";
-import { fetchTrendingGames } from "../../api/games";
-import GameSection from "./GameSection";
+import { fetchNewGames } from "../../api/games";
+import GameSection from "../Home/GameSection";
 
-export default function Trending() {
+
+export default function NewGames() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTrendingGames(6) 
+    fetchNewGames(6) 
       .then((res) => {
-       
         const formatted = res.data.map(game => ({
           id: game.id,
           title: game.name,
@@ -25,7 +25,9 @@ export default function Trending() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="loading">Loading Trending Games...</p>;
+  if (loading) return <p className="loading">Loading New Games...</p>;
 
-  return <GameSection title="Trending Now" games={games} showArrow={false} />;
+  return <GameSection title="New Releases" games={games} showArrow={true} />;
+
+ 
 }

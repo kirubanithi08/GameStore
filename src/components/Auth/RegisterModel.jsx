@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { registerUser } from "../../api/auth";
+import { registerUser, loginUser } from "../../api/auth";
 import Modal from "./Model";
+import { useAuth } from "../../Context/AuthContext"; 
 import "./AuthModel.css";
 
-export default function RegisterModal({ onClose, onSuccess }) { // <-- add onSuccess
+export default function RegisterModal({ onClose }) {
+  const { login } = useAuth();  // <-- from AuthContext
+
   const [form, setForm] = useState({ username: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
 
@@ -11,14 +14,20 @@ export default function RegisterModal({ onClose, onSuccess }) { // <-- add onSuc
     setStatus({ loading: true, error: "", success: "" });
 
     try {
-      const { data } = await registerUser(form);
+      // 1️⃣ Register user
+      await registerUser(form);
 
-      setStatus({ loading: false, error: "", success: data.message || "Account created!" });
+      // 2️⃣ Automatically login after register
+      const { data } = await loginUser(form);
 
-      // Automatically log in user after registration
-      onSuccess({ name: form.username });
+      // data must contain accessToken + user info
+      login(data.accessToken, {
+        username: data.username,
+        role: data.role,
+      });
 
-      onClose();
+      onClose(); // Close modal
+
     } catch (err) {
       setStatus({
         loading: false,
@@ -31,31 +40,29 @@ export default function RegisterModal({ onClose, onSuccess }) { // <-- add onSuc
   return (
     <Modal onClose={onClose}>
       <h2 className="modal-title">Register</h2>
+
       <div className="modal-group">
         <label>Username</label>
         <input
           type="text"
           value={form.username}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, username: e.target.value }))
-          }
-          placeholder="Enter username"
+          onChange={(e) => setForm({ ...form, username: e.target.value })}
         />
       </div>
+
       <div className="modal-group">
         <label>Password</label>
         <input
           type="password"
           value={form.password}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, password: e.target.value }))
-          }
-          placeholder="Enter password"
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
       </div>
+
       {status.error && <p className="error-text">{status.error}</p>}
       {status.success && <p className="success-text">{status.success}</p>}
-      <button className="submit-btn" onClick={handleRegister} disabled={status.loading}>
+
+      <button onClick={handleRegister} disabled={status.loading} className="submit-btn">
         {status.loading ? "Registering..." : "Register"}
       </button>
     </Modal>

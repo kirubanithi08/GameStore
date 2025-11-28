@@ -1,33 +1,59 @@
 import { Route, Routes } from "react-router-dom";
-import SideBar from "./components/SideBar"
+import SideBar from "./Layout/SideBar";
 
-import Home from "./Routes/Home"
+// Pages
+import Home from "./Routes/Home";
 import Games from "./Routes/Games";
-import Buys from "./Routes/Buys"
-import WishList from "./Routes/WishList"
-import Dashboard from "./Routes/Dashboard"
+import Buys from "./Routes/Buys";
+import WishList from "./Routes/WishList";
+import Dashboard from "./Routes/Dashboard";
 import GameDetails from "./Pages/GameDetails";
 
+// Auth Protection
+import PrivateRoute from "./Router/PrivateRoute";
 
 function App() {
   return (
-
     <div className="app">
       <SideBar />
 
-        <Routes>
+      <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
-         <Route path="/games" element={<Games />} />
-        <Route path="/buys" element={<Buys />} />
-        <Route path="/wishList" element={<WishList />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/games" element={<Games />} />
         <Route path="/game/:id" element={<GameDetails />} />
 
-      </Routes>
+        {/* User-only routes */}
+        <Route
+          path="/buys"
+          element={
+            <PrivateRoute roles={["USER", "ADMIN"]}>
+              <Buys />
+            </PrivateRoute>
+          }
+        />
 
-      {/* <i class="fa-light fa-magnifying-glass"></i> */}
+        <Route
+          path="/wishlist"
+          element={
+            <PrivateRoute roles={["USER", "ADMIN"]}>
+              <WishList />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Admin-only */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute roles={["ADMIN"]}>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </div>
-  )
+  );
 }
 
 export default App;

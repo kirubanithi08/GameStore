@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import "./Games.css";
+import "../Home/Games.css";
 
 export default function GameCard({ game }) {
   const navigate = useNavigate();

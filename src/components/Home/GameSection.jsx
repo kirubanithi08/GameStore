@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import GameCard from "./GameCard";
-import "./Games.css";
+import GameCard from "../Games/GameCard";
+import "../Home/Games.css";
 
 export default function GameSection({ title, games, showArrow }) {
   const navigate = useNavigate();

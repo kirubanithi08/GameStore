@@ -3,7 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "https://game-store-6uwt.onrender.com/api",
   withCredentials: true,
-  timeout: 10000,
+  timeout: 50000,
 });
 
 api.interceptors.request.use((config) => {

@@ -2,8 +2,8 @@ import React from 'react'
 import Hero from '../components/Hero';
 
 
-import Trending from '../components/Games/Trending';
-import NewGames from '../components/Games/NewGames';
+import Trending from '../components/Home/Trending';
+import NewGames from '../components/Home/NewGames';
 
 function Home() {
   return (
