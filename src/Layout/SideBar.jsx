@@ -58,7 +58,7 @@ export default function Sidebar() {
             )}
 
             {/* Only ADMIN can see Dashboard */}
-            {user?.role === "ADMIN" && (
+            {user?.role === "ROLE_ADMIN" && (
               <li>
                 <NavLink to="/dashboard" className="nav-link">
                   <i className="fas fa-user-shield"></i>

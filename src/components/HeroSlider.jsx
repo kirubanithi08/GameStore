@@ -6,7 +6,7 @@ function HeroSlider({ slides = [] }) {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
-  // Safely get current slide
+  
   const current = slides[index] || {
     id: "",
     title: "",
@@ -20,7 +20,7 @@ function HeroSlider({ slides = [] }) {
   const prevSlide = () => setIndex((prev) => (slides.length ? (prev - 1 + slides.length) % slides.length : 0));
 
   useEffect(() => {
-    if (!slides.length) return; // no slides, skip timer
+    if (!slides.length) return; 
     const timer = setInterval(nextSlide, 7000);
     return () => clearInterval(timer);
   }, [index, slides]);
@@ -32,22 +32,22 @@ function HeroSlider({ slides = [] }) {
   return (
     <div className="heroSlider">
       <div className="slide fade">
-        {/* Genre Tags */}
+       
         <div className="genreTags">
           {current.genre?.map((g, i) => (
             <span key={i} className="genreTag">{g}</span>
           ))}
         </div>
 
-        {/* Hero Image */}
+       
         {current.img && (
           <img className="heroImg" src={current.img} alt={current.title} onClick={openGame} />
         )}
 
-        {/* Shadow */}
+       
         <div className="heroShadow"></div>
 
-        {/* Hero Info */}
+       
         <div className="heroInfo">
           <div className="heroText" onClick={openGame}>
             <h2>{current.title}</h2>
@@ -61,7 +61,7 @@ function HeroSlider({ slides = [] }) {
           )}
         </div>
 
-        {/* Navigation Buttons */}
+       
         {slides.length > 1 && (
           <>
             <button className="prevBtn" onClick={prevSlide}>❮</button>

@@ -1,0 +1,73 @@
+.modernGameCard {
+  background: #181818;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.modernGameCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.mgc-img img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  transition: 0.3s ease;
+}
+
+.modernGameCard:hover .mgc-img img {
+  filter: brightness(0.8);
+}
+
+.mgc-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mgc-info h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mgc-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mgc-tag {
+  background: #292929;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #bbb;
+}
+
+.mgc-buyBtn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 8px 0;
+  background: #1e88e5;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  transition: 0.25s ease;
+}
+
+.mgc-buyBtn:hover {
+  background: #42a5f5;
+}

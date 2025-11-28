@@ -1,34 +1,28 @@
-
-import { useNavigate } from "react-router-dom";
-import "../Home/Games.css";
+import { Link } from "react-router-dom";
+import "./GameCard.css";
 
 export default function GameCard({ game }) {
-  const navigate = useNavigate();
-
   return (
-    <div className="gameCard" onClick={() => navigate(`/game/${game.id}`)}>
-      
-      <img src={game.img} alt={game.title} className="gameImg" />
+    <Link to={`/game/${game.id}`} className="modernGameCard">
+      <div className="mgc-img">
+        <img src={game.img} alt={game.title} />
+      </div>
 
-      
-      <div className="gameInfo">
+      <div className="mgc-info">
         <h3>{game.title}</h3>
 
-        
-        {/* <div className="genres">
-          {game.genre.map((g, i) => (
-            <span key={i} className="genreTag">{g}</span>
+        <div className="mgc-tags">
+          {game.genre.slice(0, 2).map((g, i) => (
+            <span className="mgc-tag" key={i}>
+              {g}
+            </span>
           ))}
-        </div> */}
+        </div>
 
-        <p>{game.description}</p>
+        <button className="mgc-buyBtn">
+          Buy — {game.prize}
+        </button>
       </div>
-
-      
-      <div className="gameBottom">
-        <span className="price">{game.prize}</span>
-        <button className="buyBtn">Buy</button>
-      </div>
-    </div>
+    </Link>
   );
 }

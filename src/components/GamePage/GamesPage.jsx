@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchGamesPaginated, searchGames } from "../../api/games";
-// import GameCard from "../Games/GameCard";
 
-import GamePageCard from "./GamePageCard";
+import GameCard from "../Games/GameCard";
 import SearchBar from "./SearchBar";
 import "./GamePage.css";
 
@@ -13,28 +12,27 @@ export default function GamesPage() {
 
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [size] = useState(12);
+  const size = 12;
   const [totalPages, setTotalPages] = useState(0);
 
   const [genre, setGenre] = useState("ALL");
 
-  // Fetch paginated games (only when NOT searching)
+ 
   useEffect(() => {
     if (!searchQuery.trim()) loadGames();
   }, [page]);
 
   const loadGames = () => {
     setLoading(true);
-
     fetchGamesPaginated(page, size)
       .then((res) => {
-        const formatted = res.data.content.map((game) => ({
-          id: game.id,
-          title: game.name,
-          img: game.img,
-          description: game.description,
-          prize: `$${game.price}`,
-          genre: game.genres.map((g) => g.name),
+        const formatted = res.data.content.map((g) => ({
+          id: g.id,
+          title: g.name,
+          img: g.img,
+          description: g.description,
+          prize: `$${g.price}`,
+          genre: g.genres.map((x) => x.name),
         }));
 
         setGames(formatted);
@@ -43,35 +41,33 @@ export default function GamesPage() {
       .finally(() => setLoading(false));
   };
 
-  // Search API
+  
   const handleSearch = async (text) => {
     setSearchQuery(text);
 
-    if (text.trim() === "") {
+    if (!text.trim()) {
       setSearchResults([]);
       return;
     }
 
     setLoading(true);
-
     try {
       const res = await searchGames(text);
-      const formatted = res.data.map((game) => ({
-        id: game.id,
-        title: game.name,
-        img: game.img,
-        description: game.description,
-        prize: `$${game.price}`,
-        genre: game.genres.map((g) => g.name),
+      const formatted = res.data.map((g) => ({
+        id: g.id,
+        title: g.name,
+        img: g.img,
+        description: g.description,
+        prize: `$${g.price}`,
+        genre: g.genres.map((x) => x.name),
       }));
-
       setSearchResults(formatted);
     } finally {
       setLoading(false);
     }
   };
 
-  // Final list
+ 
   const listToShow = (searchQuery ? searchResults : games).filter(
     (g) => genre === "ALL" || g.genre.includes(genre)
   );
@@ -80,26 +76,24 @@ export default function GamesPage() {
     <div className="gamesPage">
       <h1>All Games</h1>
 
-      
-      {/* Genre Filter */}
+      {/* Search + Genre in same row */}
       <div className="topControls">
-  <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} />
 
-  <select
-    value={genre}
-    onChange={(e) => setGenre(e.target.value)}
-    className="genre-select"
-  >
-    <option value="ALL">All Genres</option>
-    <option value="Action">Action</option>
-    <option value="Adventure">Adventure</option>
-    <option value="RPG">RPG</option>
-    <option value="Shooter">Shooter</option>
-  </select>
-</div>
+        <select
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          className="genre-select"
+        >
+          <option value="ALL">All Genres</option>
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <option value="RPG">RPG</option>
+          <option value="Shooter">Shooter</option>
+        </select>
+      </div>
 
-
-      {/* Skeleton Loading */}
+      
       {loading ? (
         <div className="gamesGrid">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -113,13 +107,13 @@ export default function GamesPage() {
       ) : (
         <div className="gamesGrid">
           {listToShow.map((g) => (
-            // <GameCard key={g.id} game={g} />
-            <GamePageCard key={g.id} game={g} />
+            // <GamePageCard key={g.id} game={g} />
+             <GameCard key={g.id} game={g} />
           ))}
         </div>
       )}
 
-      {/* Hide pagination when searching */}
+     
       {!searchQuery && !loading && (
         <div className="pagination">
           <button disabled={page === 0} onClick={() => setPage(page - 1)}>
