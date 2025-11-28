@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
-import { fetchGamesPaginated } from "../../api/games"; // you create this function
-import GameCard from "../Games/GameCard";
+import { fetchGamesPaginated, searchGames } from "../../api/games";
+// import GameCard from "../Games/GameCard";
+
+import GamePageCard from "./GamePageCard";
+import SearchBar from "./SearchBar";
 import "./GamePage.css";
 
 export default function GamesPage() {
   const [games, setGames] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [size] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [genre, setGenre] = useState("ALL");
+
+  // Fetch paginated games (only when NOT searching)
   useEffect(() => {
-    loadGames();
+    if (!searchQuery.trim()) loadGames();
   }, [page]);
 
   const loadGames = () => {
@@ -34,36 +43,101 @@ export default function GamesPage() {
       .finally(() => setLoading(false));
   };
 
+  // Search API
+  const handleSearch = async (text) => {
+    setSearchQuery(text);
+
+    if (text.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await searchGames(text);
+      const formatted = res.data.map((game) => ({
+        id: game.id,
+        title: game.name,
+        img: game.img,
+        description: game.description,
+        prize: `$${game.price}`,
+        genre: game.genres.map((g) => g.name),
+      }));
+
+      setSearchResults(formatted);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Final list
+  const listToShow = (searchQuery ? searchResults : games).filter(
+    (g) => genre === "ALL" || g.genre.includes(genre)
+  );
+
   return (
     <div className="gamesPage">
       <h1>All Games</h1>
 
+      
+      {/* Genre Filter */}
+      <div className="topControls">
+  <SearchBar onSearch={handleSearch} />
+
+  <select
+    value={genre}
+    onChange={(e) => setGenre(e.target.value)}
+    className="genre-select"
+  >
+    <option value="ALL">All Genres</option>
+    <option value="Action">Action</option>
+    <option value="Adventure">Adventure</option>
+    <option value="RPG">RPG</option>
+    <option value="Shooter">Shooter</option>
+  </select>
+</div>
+
+
+      {/* Skeleton Loading */}
       {loading ? (
-        <p className="loading">Loading games...</p>
+        <div className="gamesGrid">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div className="skeleton-card" key={i}>
+              <div className="skeleton-img"></div>
+              <div className="skeleton-title"></div>
+              <div className="skeleton-line"></div>
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="gamesGrid">
-          {games.map((g) => (
-            <GameCard key={g.id} game={g} />
+          {listToShow.map((g) => (
+            // <GameCard key={g.id} game={g} />
+            <GamePageCard key={g.id} game={g} />
           ))}
         </div>
       )}
 
-      <div className="pagination">
-        <button disabled={page === 0} onClick={() => setPage(page - 1)}>
-          Previous
-        </button>
+      {/* Hide pagination when searching */}
+      {!searchQuery && !loading && (
+        <div className="pagination">
+          <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+            {"<"}
+          </button>
 
-        <span>
-          Page {page + 1} / {totalPages}
-        </span>
+          <span>
+            {page + 1} / {totalPages}
+          </span>
 
-        <button
-          disabled={page >= totalPages - 1}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage(page + 1)}
+          >
+            {">"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

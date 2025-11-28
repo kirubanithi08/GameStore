@@ -1,0 +1,32 @@
+.searchBar {
+  width: 100%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+/* Placeholder */
+.searchInput::placeholder {
+  color: #777;
+  font-style: italic;
+}
+
+/* Glow effect on focus */
+.searchInput:focus {
+  border-color: #4db8ff;
+  box-shadow: 0 0 8px rgba(77, 184, 255, 0.4);
+}
+
+/* Smooth hover */
+.searchInput:hover {
+  border-color: #555;
+}
