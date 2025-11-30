@@ -19,8 +19,15 @@ export function AuthProvider({ children }) {
     }
 
     try {
+      // const { data } = await fetchMe();
+      // setUser(data);
+
       const { data } = await fetchMe();
-      setUser(data);
+setUser({
+  ...data,
+  role: data.role?.toUpperCase()
+});
+
     } catch {
       localStorage.removeItem("accessToken");
     } finally {
