@@ -6,17 +6,26 @@ const api = axios.create({
   timeout: 50000,
 });
 
+// Attach Access Token BEFORE every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  console.log("REQUEST TOKEN:", config.headers["Authorization"]);
+
   return config;
 });
+
 
 let isRefreshing = false;
 let queue = [];
 
+// Handle pending requests while refreshing token
 const resolveQueue = (error, token = null) => {
-  queue.forEach(p => (error ? p.reject(error) : p.resolve(token)));
+  queue.forEach((p) => (error ? p.reject(error) : p.resolve(token)));
   queue = [];
 };
 
@@ -25,6 +34,7 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
+    // Handle 401 (expired token)
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
 
@@ -33,11 +43,16 @@ api.interceptors.response.use(
 
         try {
           const { data } = await api.post("/auth/refresh");
-
           const newToken = data.accessToken;
+
+          // Save new token
           localStorage.setItem("accessToken", newToken);
 
-          api.defaults.headers.Authorization = `Bearer ${newToken}`;
+          // FIX HERE — correct way to set default headers
+          api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+
+          console.log("NEW TOKEN SET:", newToken);
+
           resolveQueue(null, newToken);
         } catch (err) {
           resolveQueue(err);
