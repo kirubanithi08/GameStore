@@ -1,35 +1,161 @@
-.dashboard-container {
-    margin-left:192px;
+:root {
+  --accent: #00c6ff;
+  --radius: 12px;
+  --panel: #1a1a1a;
+}
+
+
+.upperBox {
   padding: 20px;
-  font-family: Arial, sans-serif;
+  margin-left: 200px;
 }
 
-.tabs {
-  margin-bottom: 20px;
-}
 
-.tab {
-  padding: 10px 16px;
-  margin-right: 10px;
-  background: #fff;
-  border: 1px solid #ccc;
+.create-btn {
+  background: var(--accent);
+  padding: 12px 24px;
+  border: none;
+  color: black;
+  font-weight: bold;
+  border-radius: var(--radius);
   cursor: pointer;
-  border-radius: 4px;
   transition: 0.2s;
 }
 
-.tab:hover {
-  background: #f2f2f2;
+.create-btn:hover {
+  transform: scale(1.05);
 }
 
-.tab.active {
-  background: #e0e0e0;
-  font-weight: bold;
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
 }
 
-.tab-content {
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 4px;
-  background: #fafafa;
+
+.game-form-modern {
+  width: 520px;
+  background: var(--panel);
+  padding: 30px;
+  border-radius: var(--radius);
+  animation: slideIn .25s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+
+.form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+.form-group-inline { display: flex; justify-content: space-between; gap: 20px; }
+input, textarea { padding: 10px; border-radius: var(--radius); background: #111; border: 1px solid #333; color: white; }
+textarea { height: 100px; }
+.checkbox-group { display: flex; align-items: center; gap: 8px; }
+
+
+.genre-chip-container { display: flex; flex-wrap: wrap; gap: 10px; }
+.genre-chip { padding: 8px 14px; background: #222; border-radius: 20px; cursor: pointer; border: 1px solid #333; transition: 0.2s; }
+.genre-chip.selected { background: var(--accent); color: black; border-color: var(--accent); }
+
+
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.cancel-btn { padding: 10px 20px; background: #333; border-radius: var(--radius); border: none; color: white; cursor: pointer; }
+.modern-submit-btn { padding: 10px 24px; background: var(--accent); border-radius: var(--radius); border: none; color: black; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.modern-submit-btn:hover { transform: scale(1.05); }
+
+
+.error-box { background: rgba(255,50,50,0.15); border-left: 4px solid red; padding: 10px; margin-bottom: 15px; border-radius: 6px; }
+
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: -300px;
+  background: rgba(0,0,0,0.85);
+  color: #00ffae;
+  padding: 14px 22px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 20001;
+}
+
+.toast.show {
+  opacity: 1;
+  right: 20px;
+}
+
+
+
+.user-list {
+  margin-top: 30px;
+  margin-left: 200px;
+  color: white;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #444;
+  padding: 10px;
+  text-align: left;
+}
+
+.user-table th {
+  background: #222;
+}
+
+.user-table tr:nth-child(even) {
+  background: #111;
+}
+
+
+.delete-btn {
+  padding: 6px 12px;
+  background: red;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  background: darkred;
+}
+
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  color: black;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

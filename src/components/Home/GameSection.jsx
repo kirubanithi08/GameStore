@@ -22,7 +22,7 @@ export default function GameSection({ title, games, showArrow }) {
       </div>
 
       <div className="gameGrid">
-        {games.slice(0, 6).map((g) => (
+        {games.map((g) => (
           <GameCard key={g.id} game={g} />
         ))}
       </div>

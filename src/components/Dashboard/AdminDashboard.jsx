@@ -1,150 +1,118 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import GameForm from "./GameForm";
 import api from "../../api/axios";
-import "./DashboardGame.css";
+import "./Dashboard.css";
 
 export default function AdminDashboard() {
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
   const [error, setError] = useState("");
-  const [genres, setGenres] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    img: "",
-    cover: "",
-    description: "",
-    price: "",
-    featured: false,
-    genres: []
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
 
+ 
   useEffect(() => {
-    api.get("/genres")
-      .then(res => setGenres(res.data))
-      .catch(() => setError("Failed to load genres"));
+    setLoadingUsers(true);
+    api
+      .get("/user")
+      .then((res) => {
+        console.log("Users API Response:", res.data);
+        setUsers(res.data.content || []); 
+      })
+      .catch(() => setError("Failed to load users"))
+      .finally(() => setLoadingUsers(false));
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
-  };
-
-  const handleGenreToggle = (id) => {
-    const selected = form.genres.includes(id)
-      ? form.genres.filter(g => g !== id)
-      : [...form.genres, id];
-    setForm({ ...form, genres: selected });
-  };
-
-  const showToast = () => {
-    const toast = document.getElementById("toast");
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2500);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-console.log("TOKEN SENT:", localStorage.getItem("accessToken"));
-console.log("HEADER:", api.defaults.headers.common?.Authorization);
-
-
-
-    const payload = {
-      ...form,
-      price: Number(form.price), // convert string -> number
-      genres: form.genres        // array of genre IDs only
-    };
+  
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await api.post("/games", payload);
-      showToast();
-      setForm({
-        name: "",
-        img: "",
-        cover: "",
-        description: "",
-        price: "",
-        featured: false,
-        genres: []
-      });
-      setShowForm(false);
+      await api.delete(`/user/${id}`);
+      setUsers((prev) => prev.filter((u) => u.id !== id));
     } catch (err) {
-      console.error(err.response?.data || err);
-      setError("Failed to create game.");
-    } finally {
-      setLoading(false);
+      alert("Failed to delete user.");
     }
   };
 
+ 
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(users.length / usersPerPage) || 1;
+
   return (
     <div className="dashboard-container">
-      <h1>Game Management</h1>
-      <button className="create-btn" onClick={() => setShowForm(true)}>+ Create Game</button>
+     
+      <div className="upperBox">
+        <button className="create-btn" onClick={() => setShowForm(true)}>
+          + Create Game
+        </button>
+      </div>
 
-      {showForm && (
-        <div className="modal-overlay">
-          <form className="game-form-modern" onSubmit={handleSubmit}>
-            <h2>Create New Game</h2>
-            {error && <p className="error-box">{error}</p>}
+      
+      {showForm && <GameForm onClose={() => setShowForm(false)} />}
 
-            <div className="form-group">
-              <label>Name</label>
-              <input name="name" value={form.name} onChange={handleChange} required />
-            </div>
+      
+      <div className="user-list">
+        <h2>Users</h2>
 
-            <div className="form-group">
-              <label>Image URL</label>
-              <input name="img" value={form.img} onChange={handleChange} required />
-            </div>
-
-            <div className="form-group">
-              <label>Cover URL</label>
-              <input name="cover" value={form.cover} onChange={handleChange} required />
-            </div>
-
-            <div className="form-group">
-              <label>Description</label>
-              <textarea name="description" value={form.description} onChange={handleChange} required />
-            </div>
-
-            <div className="form-group-inline">
-              <div>
-                <label>Price</label>
-                <input type="number" name="price" value={form.price} onChange={handleChange} required />
-              </div>
-
-              <div className="checkbox-group">
-                <label>Featured</label>
-                <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Genres</label>
-              <div className="genre-chip-container">
-                {genres.map(genre => (
-                  <div
-                    key={genre.id}
-                    className={`genre-chip ${form.genres.includes(genre.id) ? "selected" : ""}`}
-                    onClick={() => handleGenreToggle(genre.id)}
-                  >
-                    {genre.name}
-                  </div>
+        {loadingUsers ? (
+          <p>Loading users...</p>
+        ) : error ? (
+          <p className="error-box">{error}</p>
+        ) : (
+          <>
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.username}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </div>
+              </tbody>
+            </table>
 
-            <div className="form-actions">
-              <button type="button" className="cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
-              <button type="submit" className="modern-submit-btn">{loading ? "Saving..." : "Create Game"}</button>
-            </div>
-          </form>
-        </div>
-      )}
+            
+            <div className="pagination">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Previous
+              </button>
 
-      <div id="toast" className="toast">Game Created Successfully!</div>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

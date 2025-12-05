@@ -23,7 +23,7 @@ export default function Sidebar() {
 
         <nav className="sidebar-nav">
           <ul>
-            {/* Always visible */}
+           
             <li>
               <NavLink to="/" className="nav-link">
                 <i className="fa-solid fa-house"></i>
@@ -38,7 +38,7 @@ export default function Sidebar() {
               </NavLink>
             </li>
 
-            {/* Visible ONLY when logged in */}
+           
             {user && (
               <>
                 <li>
@@ -57,7 +57,7 @@ export default function Sidebar() {
               </>
             )}
 
-            {/* Only ADMIN can see Dashboard */}
+            
             {user?.role === "ROLE_ADMIN" && (
               <li>
                 <NavLink to="/dashboard" className="nav-link">

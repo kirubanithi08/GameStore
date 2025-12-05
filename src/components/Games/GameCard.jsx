@@ -20,7 +20,7 @@ export default function GameCard({ game }) {
         </div>
 
         <button className="mgc-buyBtn">
-          Buy — {game.prize}
+          Buy — {game.price}
         </button>
       </div>
     </Link>

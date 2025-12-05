@@ -5,36 +5,18 @@
   --radius: 12px;
 }
 
-/* MAIN PAGE */
-.dashboard-container {
-  padding-left: 200px;
-  padding: 40px;
-  color: white;
 
-   margin-left: 200px;
+.dashboard-container {
+  color: white;
+  padding: 20px;
+  margin-left: 200px; 
 }
 
 h1 {
   margin-bottom: 20px;
 }
 
-/* CREATE BUTTON */
-.create-btn {
-  background: var(--accent);
-  padding: 12px 24px;
-  border: none;
-  color: black;
-  font-weight: bold;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: 0.2s;
-}
 
-.create-btn:hover {
-  transform: scale(1.05);
-}
-
-/* MODAL BG */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -43,16 +25,18 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10000; 
 }
 
-/* FORM CARD */
+
 .game-form-modern {
   width: 520px;
+  max-width: calc(100% - 40px);
   background: var(--panel);
   padding: 30px;
   border-radius: var(--radius);
   animation: slideIn .25s ease-out;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 @keyframes slideIn {
@@ -65,7 +49,7 @@ h1 {
   font-size: 24px;
 }
 
-/* INPUTS */
+
 .form-group {
   margin-bottom: 18px;
   display: flex;
@@ -86,10 +70,12 @@ select {
   background: #111;
   border: 1px solid #333;
   color: white;
+  outline: none;
 }
 
 textarea {
   height: 100px;
+  resize: vertical;
 }
 
 .checkbox-group {
@@ -98,7 +84,7 @@ textarea {
   gap: 8px;
 }
 
-/* GENRE CHIPS */
+
 .genre-chip-container {
   display: flex;
   flex-wrap: wrap;
@@ -112,6 +98,7 @@ textarea {
   cursor: pointer;
   border: 1px solid #333;
   transition: .2s;
+  user-select: none;
 }
 
 .genre-chip.selected {
@@ -120,7 +107,7 @@ textarea {
   border-color: var(--accent);
 }
 
-/* FORM BUTTONS */
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -148,35 +135,50 @@ textarea {
 }
 
 .modern-submit-btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-/* ERROR BOX */
+
 .error-box {
-  background: rgba(255, 50, 50, 0.15);
+  background: rgba(255, 50, 50, 0.12);
   border-left: 4px solid red;
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 6px;
 }
 
-/* SUCCESS TOAST */
+
 .toast {
   position: fixed;
   top: 20px;
   right: -300px;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.95);
   color: #00ffae;
   padding: 14px 22px;
   border-radius: var(--radius);
   font-size: 15px;
   font-weight: 600;
-  z-index: 2001;
+  z-index: 11000; /* above modal */
   opacity: 0;
-  transition: all .4s ease;
+  transition: all .35s ease;
+  pointer-events: none;
 }
 
 .toast.show {
   opacity: 1;
   right: 20px;
+}
+
+
+@media (max-width: 700px) {
+  .dashboard-container {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .game-form-modern {
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+  }
 }

@@ -9,7 +9,7 @@ export default function Trending() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTrendingGames(6) 
+    fetchTrendingGames(5) 
       .then((res) => {
        
         const formatted = res.data.map(game => ({
@@ -17,7 +17,7 @@ export default function Trending() {
           title: game.name,
           img: game.img,
           description: game.description,
-          prize: `$${game.price}`,
+          price: `$${game.price}`,
           genre: game.genres.map(g => g.name)
         }));
         setGames(formatted);

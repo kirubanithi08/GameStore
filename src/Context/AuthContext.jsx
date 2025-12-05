@@ -4,7 +4,7 @@ import { fetchMe } from "../api/auth";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);  // username + role
+  const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,8 +19,7 @@ export function AuthProvider({ children }) {
     }
 
     try {
-      // const { data } = await fetchMe();
-      // setUser(data);
+      
 
       const { data } = await fetchMe();
 setUser({

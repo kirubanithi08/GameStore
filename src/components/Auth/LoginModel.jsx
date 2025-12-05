@@ -23,7 +23,7 @@ export default function LoginModal({ onClose }) {
 
       login(data.accessToken, {
   username: data.username,
-  role: data.role?.toUpperCase()      // Ensures "ROLE_ADMIN"
+  role: data.role?.toUpperCase()      
 });
 
 

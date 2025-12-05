@@ -31,7 +31,7 @@ export default function GamesPage() {
           title: g.name,
           img: g.img,
           description: g.description,
-          prize: `$${g.price}`,
+          price: `$${g.price}`,
           genre: g.genres.map((x) => x.name),
         }));
 
@@ -58,7 +58,7 @@ export default function GamesPage() {
         title: g.name,
         img: g.img,
         description: g.description,
-        prize: `$${g.price}`,
+        price: `$${g.price}`,
         genre: g.genres.map((x) => x.name),
       }));
       setSearchResults(formatted);
@@ -107,7 +107,7 @@ export default function GamesPage() {
       ) : (
         <div className="gamesGrid">
           {listToShow.map((g) => (
-            // <GamePageCard key={g.id} game={g} />
+           
              <GameCard key={g.id} game={g} />
           ))}
         </div>

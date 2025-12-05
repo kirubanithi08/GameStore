@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/axios"; 
+import { fetchMe } from "../api/auth";
+import GameForm from "../components/Dashboard/GameForm"; 
 import "./GameDetails.css";
 
 export default function GameDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); 
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false); 
+
+  useEffect(() => {
+    fetchMe()
+      .then(res => setUser(res.data))
+      .catch(() => setUser(null)); 
+  }, []);
 
   useEffect(() => {
     async function fetchGame() {
       try {
         const res = await fetch(`https://game-store-6uwt.onrender.com/api/games/${id}`);
         const data = await res.json();
-
         setGame({
           id: data.id,
-          title: data.name,
+          name: data.name,
           img: data.img,
           cover: data.img,
           description: data.description,
-          genre: data.genres?.map(g => g.name),
+          genres: data.genres,
           price: data.price,
-          screenshots: data.screenshots
+          screenshots: data.screenshots,
+          featured: data.featured
         });
       } catch (err) {
         console.error("Error loading game:", err);
@@ -29,19 +42,34 @@ export default function GameDetails() {
         setLoading(false);
       }
     }
-
     fetchGame();
   }, [id]);
 
   if (loading) return <SkeletonGameDetails />;
-
   if (!game) return <div className="notFound">Game Not Found</div>;
+
+  const isAdmin = user?.role === "ROLE_ADMIN";
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this game?")) return;
+    setAdminLoading(true);
+    try {
+      await api.delete(`/games/${game.id}`);
+      alert("Game deleted successfully!");
+      navigate("/admin/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete the game.");
+    } finally {
+      setAdminLoading(false);
+    }
+  };
 
   return (
     <div className="gameDetailsPage">
 
       {/* Banner */}
-      <div className="gameBanner" style={{ backgroundImage: `url(${game.img})` }}>
+      <div className="gameBanner" style={{ backgroundImage: `url(${game.cover})` }}>
         <div className="bannerFade"></div>
       </div>
 
@@ -50,16 +78,16 @@ export default function GameDetails() {
 
         {/* Left: Cover */}
         <div className="coverCard">
-          <img src={game.cover} alt={game.title} />
+          <img src={game.img} alt={game.name} />
         </div>
 
         {/* Right: Game Info */}
         <div className="infoPanel">
-          <h1 className="title">{game.title}</h1>
+          <h1 className="title">{game.name}</h1>
 
           <div className="genreList">
-            {game.genre?.map((g, i) => (
-              <span key={i}>{g}</span>
+            {game.genres?.map((g, i) => (
+              <span key={i}>{g.name}</span>
             ))}
           </div>
 
@@ -69,35 +97,57 @@ export default function GameDetails() {
             <button className="priceBtn">Buy — ${game.price}</button>
             <button className="wishlistBtn">❤️ Wishlist</button>
           </div>
+
+          
+          {isAdmin && (
+            <div className="adminActions">
+              <button className="adminBtn" onClick={() => setShowForm(true)} disabled={adminLoading}>
+                Edit
+              </button>
+              <button className="adminBtn" onClick={handleDelete} disabled={adminLoading}>
+                {adminLoading ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Screenshots */}
-      {/* {game.screenshots?.length > 0 && (
-        <div className="screenshotsSection">
-          <h2>Screenshots</h2>
-          <div className="screenshots">
-            {game.screenshots.map((shot, i) => (
-              <img key={i} src={shot} alt={`Screenshot ${i + 1}`} />
-            ))}
-          </div>
-        </div>
-      )} */}
+      
+      {showForm && (
+        <GameForm
+          game={game}
+          onClose={() => {
+            setShowForm(false);
+            
+            setLoading(true);
+            api.get(`/games/${game.id}`).then(res => {
+              const data = res.data;
+              setGame({
+                id: data.id,
+                name: data.name,
+                img: data.img,
+                cover: data.img,
+                description: data.description,
+                genres: data.genres,
+                price: data.price,
+                screenshots: data.screenshots,
+                featured: data.featured
+              });
+            }).finally(() => setLoading(false));
+          }}
+        />
+      )}
     </div>
   );
 }
 
-/* -------------------------
-   ⭐ Skeleton Loader
--------------------------- */
+/*Skeleton Loader*/
 function SkeletonGameDetails() {
   return (
     <div className="gameDetailsPage">
       <div className="gameBanner skeleton"></div>
-
       <div className="gameMainContent">
         <div className="coverCard skeletonBox"></div>
-
         <div className="infoPanel">
           <div className="skeletonText titleSkeleton"></div>
           <div className="skeletonText shortSkeleton"></div>

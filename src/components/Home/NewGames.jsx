@@ -10,14 +10,14 @@ export default function NewGames() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchNewGames(6) 
+    fetchNewGames(5)
       .then((res) => {
         const formatted = res.data.map(game => ({
           id: game.id,
           title: game.name,
           img: game.img,
           description: game.description,
-          prize: `$${game.price}`,
+          price: `$${game.price}`, 
           genre: game.genres.map(g => g.name)
         }));
         setGames(formatted);
@@ -28,6 +28,4 @@ export default function NewGames() {
   if (loading) return <p className="loading">Loading New Games...</p>;
 
   return <GameSection title="New Releases" games={games} showArrow={true} />;
-
- 
 }
