@@ -18,8 +18,9 @@ function Hero() {
           title: game.name || "Untitled Game",
           text: game.description || "",
           img: game.img || "",
+          cover:game.cover || "",
           genre: Array.isArray(game.genres) ? game.genres.map(g => g.name) : [],
-          prize: game.price != null ? `$${game.price}` : "N/A",
+          price: game.price != null ? `$${game.price}` : "N/A",
         }));
 
         setSlides(formatted);

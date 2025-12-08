@@ -15,16 +15,14 @@ body {
   padding: 0;
 }
 
-
 .gameDetailsPage {
-  padding-left: 192px; 
+  padding-left: 192px;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-
 .gameBanner {
-  height: 325px;
+  height: 425px;
   width: 100%;
   background-size: cover;
   background-position: center top;
@@ -40,11 +38,10 @@ body {
   background: linear-gradient(to bottom, transparent, var(--bg));
 }
 
-
 .gameMainContent {
   display: flex;
   gap: 40px;
-  margin-top: -120px; 
+  margin-top: -220px;
   padding: 0 60px;
   flex-wrap: wrap;
   position: relative;
@@ -57,7 +54,7 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   background: #111;
-  box-shadow: 0px 15px 35px rgba(0,0,0,0.7);
+  box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.7);
   flex-shrink: 0;
 }
 
@@ -72,7 +69,7 @@ body {
   transform: scale(1.05);
 }
 
-
+/* INFO PANEL */
 .infoPanel {
   flex: 1;
   background: var(--panel);
@@ -107,7 +104,7 @@ body {
   margin-bottom: 30px;
 }
 
-
+/* PURCHASE ROW */
 .purchaseRow {
   display: flex;
   align-items: center;
@@ -135,47 +132,42 @@ body {
 }
 
 .wishlistBtn {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
 }
 
 .wishlistBtn:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* SCREENSHOTS */
-/* .screenshotsSection {
-  margin-top: 60px;
-  padding: 0 60px;
-}
-
-.screenshotsSection h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.screenshots {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 15px;
-}
-
-.screenshots img {
-  width: 280px;
-  height: 160px;
+/* --- WISHLIST ICON BUTTON (NEW) --- */
+.wishlistIcon {
+  font-size: 30px;
+  padding: 8px 16px;
   border-radius: var(--radius);
-  object-fit: cover;
-  transition: transform .25s ease;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  color: white;
 }
 
-.screenshots img:hover {
-  transform: scale(1.06);
-} */
+.wishlistIcon:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
 
-/*SKELETON LOADER*/
+.wishlistIcon.wishlisted {
+  background: rgba(255, 0, 0, 0.25);
+  color: #ff4d4d;
+}
+
+.wishlistIcon.wishlisted:hover {
+  background: rgba(255, 0, 0, 0.35);
+  transform: scale(1.05);
+}
+
+/* SKELETON LOADER */
 .skeleton {
   background: linear-gradient(90deg, #111 0%, #1a1a1a 50%, #111 100%);
   background-size: 200% 100%;
@@ -184,13 +176,17 @@ body {
 }
 
 @keyframes skeleton {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .skeletonBox {
   width: 280px;
-  height: 400px;
+  height: 380px;
   border-radius: var(--radius);
   margin-bottom: 20px;
 }
@@ -223,9 +219,9 @@ body {
   border-radius: var(--radius);
 }
 
-
-.adminBtn{
-   padding: 10px 18px;
+/* ADMIN BUTTONS */
+.adminBtn {
+  padding: 10px 18px;
   border-radius: 4px;
 
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -234,14 +230,13 @@ body {
   color: white;
   font-weight: 600;
   cursor: pointer;
-
   transition: 0.25s ease;
 }
 
-.adminActions{
-   padding: 10px 0;
+.adminActions {
+  padding: 10px 0;
   display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }

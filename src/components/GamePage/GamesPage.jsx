@@ -17,7 +17,6 @@ export default function GamesPage() {
 
   const [genre, setGenre] = useState("ALL");
 
- 
   useEffect(() => {
     if (!searchQuery.trim()) loadGames();
   }, [page]);
@@ -26,22 +25,27 @@ export default function GamesPage() {
     setLoading(true);
     fetchGamesPaginated(page, size)
       .then((res) => {
-        const formatted = res.data.content.map((g) => ({
+        const data = res.data;
+
+        // safe fallback
+        const content = data?.content ?? data ?? [];
+
+        const formatted = content.map((g) => ({
           id: g.id,
           title: g.name,
           img: g.img,
+          cover: g.cover,
           description: g.description,
           price: `$${g.price}`,
-          genre: g.genres.map((x) => x.name),
+          genre: g.genres?.map((x) => x.name) ?? [],
         }));
 
         setGames(formatted);
-        setTotalPages(res.data.totalPages);
+        setTotalPages(data?.totalPages ?? 1);
       })
       .finally(() => setLoading(false));
   };
 
-  
   const handleSearch = async (text) => {
     setSearchQuery(text);
 
@@ -53,30 +57,32 @@ export default function GamesPage() {
     setLoading(true);
     try {
       const res = await searchGames(text);
-      const formatted = res.data.map((g) => ({
+
+      const formatted = (res.data ?? []).map((g) => ({
         id: g.id,
         title: g.name,
         img: g.img,
+        cover: g.cover,
         description: g.description,
         price: `$${g.price}`,
-        genre: g.genres.map((x) => x.name),
+        genre: g.genres?.map((x) => x.name) ?? [],
       }));
+
       setSearchResults(formatted);
     } finally {
       setLoading(false);
     }
   };
 
- 
-  const listToShow = (searchQuery ? searchResults : games).filter(
-    (g) => genre === "ALL" || g.genre.includes(genre)
-  );
+  const listToShow =
+    (searchQuery ? searchResults : games)?.filter(
+      (g) => genre === "ALL" || g.genre.includes(genre)
+    ) ?? [];
 
   return (
     <div className="gamesPage">
       <h1>All Games</h1>
 
-      {/* Search + Genre in same row */}
       <div className="topControls">
         <SearchBar onSearch={handleSearch} />
 
@@ -93,7 +99,6 @@ export default function GamesPage() {
         </select>
       </div>
 
-      
       {loading ? (
         <div className="gamesGrid">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -107,13 +112,11 @@ export default function GamesPage() {
       ) : (
         <div className="gamesGrid">
           {listToShow.map((g) => (
-           
-             <GameCard key={g.id} game={g} />
+            <GameCard key={g.id} game={g} />
           ))}
         </div>
       )}
 
-     
       {!searchQuery && !loading && (
         <div className="pagination">
           <button disabled={page === 0} onClick={() => setPage(page - 1)}>
@@ -135,3 +138,4 @@ export default function GamesPage() {
     </div>
   );
 }
+

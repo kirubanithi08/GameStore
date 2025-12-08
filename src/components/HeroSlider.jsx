@@ -12,8 +12,9 @@ function HeroSlider({ slides = [] }) {
     title: "",
     text: "",
     img: "",
+    cover:"",
     genre: [],
-    prize: "N/A",
+    price: "N/A",
   };
 
   const nextSlide = () => setIndex((prev) => (slides.length ? (prev + 1) % slides.length : 0));
@@ -40,8 +41,8 @@ function HeroSlider({ slides = [] }) {
         </div>
 
        
-        {current.img && (
-          <img className="heroImg" src={current.img} alt={current.title} onClick={openGame} />
+        {current.cover && (
+          <img className="heroImg" src={current.cover} alt={current.title} onClick={openGame} />
         )}
 
        
@@ -54,9 +55,9 @@ function HeroSlider({ slides = [] }) {
             <p>{current.text}</p>
           </div>
 
-          {current.prize && (
+          {current.price && (
             <button className="heroPrice" onClick={openGame}>
-              Buy Now | {current.prize}
+              Buy Now | {current.price}
             </button>
           )}
         </div>
