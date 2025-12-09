@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios"; 
+import api from "../api/axios";
 import { fetchMe } from "../api/auth";
-import GameForm from "../components/Dashboard/GameForm"; 
+import GameForm from "../components/Dashboard/GameForm";
 import "./GameDetails.css";
 
 export default function GameDetails() {
@@ -12,30 +12,46 @@ export default function GameDetails() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState(null);
-  const [adminLoading, setAdminLoading] = useState(false);
+  const [user, setUser] = useState(null); // user will load only if token exists
 
-  const [showForm, setShowForm] = useState(false);
-
-  // Wishlist states
   const [wishlisted, setWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
-  // Fetch user
+  const [showForm, setShowForm] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(false);
+
+  // ---------------------------------------------------
+  // LOAD USER ONLY IF TOKEN EXISTS (NO 403 ERROR)
+  // ---------------------------------------------------
   useEffect(() => {
+    const token =
+      localStorage.getItem("jwt") ||
+      localStorage.getItem("token") ||
+      localStorage.getItem("accessToken");
+
+    if (!token) {
+      setUser(null); // not logged in
+      return;
+    }
+
     fetchMe()
-      .then(res => setUser(res.data))
+      .then((res) => setUser(res.data))
       .catch(() => setUser(null));
   }, []);
 
-  // Fetch game
+  const isAdmin = user?.role === "ROLE_ADMIN";
+
+  // ---------------------------------------------------
+  // PUBLIC GAME FETCH
+  // ---------------------------------------------------
   useEffect(() => {
-    async function fetchGame() {
+    async function loadGame() {
       try {
         const res = await fetch(
           `https://game-store-6uwt.onrender.com/api/games/${id}`
         );
         const data = await res.json();
+
         setGame({
           id: data.id,
           name: data.name,
@@ -44,33 +60,21 @@ export default function GameDetails() {
           description: data.description,
           genres: data.genres,
           price: data.price,
-          featured: data.featured
+          featured: data.featured,
         });
       } catch (err) {
-        console.error("Error loading game:", err);
+        console.error("Failed to load game:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetchGame();
+
+    loadGame();
   }, [id]);
 
-  // Fetch wishlist status
-  useEffect(() => {
-    if (!user) return;
-
-    api
-      .get("/favorites")
-      .then((res) => {
-        const ids = res.data.map((g) => g.id);
-        setWishlisted(ids.includes(Number(id)));
-      })
-      .catch((err) => console.error("Failed to load wishlist:", err));
-  }, [user, id]);
-
-  const isAdmin = user?.role === "ROLE_ADMIN";
-
-  // Toggle wishlist
+  // ---------------------------------------------------
+  // TOGGLE WISHLIST (NO NEED TO FETCH FULL LIST)
+  // ---------------------------------------------------
   const toggleWishlist = async () => {
     if (!user) return alert("Please login to use Wishlist.");
 
@@ -85,14 +89,18 @@ export default function GameDetails() {
         setWishlisted(true);
       }
     } catch (err) {
-      console.error("Wishlist error:", err);
+      console.error("Wishlist toggle error:", err);
     } finally {
       setWishlistLoading(false);
     }
   };
 
+  // ---------------------------------------------------
+  // ADMIN DELETE
+  // ---------------------------------------------------
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this game?")) return;
+
     setAdminLoading(true);
 
     try {
@@ -101,12 +109,15 @@ export default function GameDetails() {
       navigate("/admin/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete the game.");
+      alert("Failed to delete game.");
     } finally {
       setAdminLoading(false);
     }
   };
 
+  // ---------------------------------------------------
+  // LOADING / NOT FOUND
+  // ---------------------------------------------------
   if (loading) return <SkeletonGameDetails />;
   if (!game) return <div className="notFound">Game Not Found</div>;
 
@@ -120,14 +131,14 @@ export default function GameDetails() {
         <div className="bannerFade"></div>
       </div>
 
-      {/* Content */}
+      {/* Main Content */}
       <div className="gameMainContent">
-        {/* Left: Cover */}
+        {/* LEFT */}
         <div className="coverCard">
           <img src={game.img} alt={game.name} />
         </div>
 
-        {/* Right: Content */}
+        {/* RIGHT */}
         <div className="infoPanel">
           <h1 className="title">{game.name}</h1>
 
@@ -142,7 +153,6 @@ export default function GameDetails() {
           <div className="purchaseRow">
             <button className="priceBtn">Buy — ${game.price}</button>
 
-            {/* Wishlist Icon Button */}
             <button
               className={`wishlistIcon ${wishlisted ? "wishlisted" : ""}`}
               onClick={toggleWishlist}
@@ -152,7 +162,7 @@ export default function GameDetails() {
             </button>
           </div>
 
-          {/* Admin buttons */}
+          {/* ADMIN */}
           {isAdmin && (
             <div className="adminActions">
               <button
@@ -175,13 +185,14 @@ export default function GameDetails() {
         </div>
       </div>
 
-      {/* Update Form */}
+      {/* Admin Edit Form */}
       {showForm && (
         <GameForm
           game={game}
           onClose={() => {
             setShowForm(false);
 
+            // refresh game data after editing
             setLoading(true);
             api
               .get(`/games/${game.id}`)
@@ -195,7 +206,7 @@ export default function GameDetails() {
                   description: data.description,
                   genres: data.genres,
                   price: data.price,
-                  featured: data.featured
+                  featured: data.featured,
                 });
               })
               .finally(() => setLoading(false));
@@ -211,10 +222,8 @@ function SkeletonGameDetails() {
   return (
     <div className="gameDetailsPage">
       <div className="gameBanner skeleton"></div>
-
       <div className="gameMainContent">
         <div className="coverCard skeletonBox"></div>
-
         <div className="infoPanel">
           <div className="skeletonText titleSkeleton"></div>
           <div className="skeletonText shortSkeleton"></div>

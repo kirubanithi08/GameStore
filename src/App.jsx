@@ -27,7 +27,7 @@ function App() {
         <Route
           path="/buys"
           element={
-            <PrivateRoute roles={["USER", "ROLE_ADMIN"]}>
+            <PrivateRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
               <Buys />
             </PrivateRoute>
           }
@@ -36,7 +36,7 @@ function App() {
         <Route
           path="/wishlist"
           element={
-            <PrivateRoute roles={["USER", "ROLE_ADMIN"]}>
+            <PrivateRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
               <WishList />
             </PrivateRoute>
           }

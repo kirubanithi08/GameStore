@@ -15,3 +15,5 @@ export const searchGames = (query) => api.get(`/games/search?query=${query}`);
 
 export const fetchGamesPaginated = (page = 0, size = 12) =>
   api.get(`/games?page=${page}&size=${size}`);
+
+export const fetchWishlist =()=>api.get(`favorites`)
