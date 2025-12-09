@@ -71,3 +71,17 @@
 .mgc-buyBtn:hover {
   background: #42a5f5;
 }
+
+
+.wishlistBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 0, 0, 0.8);
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 5;
+}

@@ -12,7 +12,7 @@ export default function GameDetails() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState(null); // user will load only if token exists
+  const [user, setUser] = useState(null);
 
   const [wishlisted, setWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function GameDetails() {
   const [adminLoading, setAdminLoading] = useState(false);
 
   // ---------------------------------------------------
-  // LOAD USER ONLY IF TOKEN EXISTS (NO 403 ERROR)
+  // LOAD USER ONLY IF TOKEN EXISTS
   // ---------------------------------------------------
   useEffect(() => {
     const token =
@@ -30,7 +30,7 @@ export default function GameDetails() {
       localStorage.getItem("accessToken");
 
     if (!token) {
-      setUser(null); // not logged in
+      setUser(null);
       return;
     }
 
@@ -42,14 +42,12 @@ export default function GameDetails() {
   const isAdmin = user?.role === "ROLE_ADMIN";
 
   // ---------------------------------------------------
-  // PUBLIC GAME FETCH
+  // LOAD GAME (PUBLIC ENDPOINT)
   // ---------------------------------------------------
   useEffect(() => {
     async function loadGame() {
       try {
-        const res = await fetch(
-          `https://game-store-6uwt.onrender.com/api/games/${id}`
-        );
+        const res = await fetch(`https://game-store-6uwt.onrender.com/api/games/${id}`);
         const data = await res.json();
 
         setGame({
@@ -73,7 +71,25 @@ export default function GameDetails() {
   }, [id]);
 
   // ---------------------------------------------------
-  // TOGGLE WISHLIST (NO NEED TO FETCH FULL LIST)
+  // CHECK IF GAME IS ALREADY IN WISHLIST
+  // ---------------------------------------------------
+  useEffect(() => {
+    if (!user || !game) return;
+
+    async function checkFavorite() {
+      try {
+        const res = await api.get(`/favorites/exists/${game.id}`);
+        setWishlisted(res.data === true);
+      } catch (err) {
+        console.error("Failed to check wishlist", err);
+      }
+    }
+
+    checkFavorite();
+  }, [user, game]);
+
+  // ---------------------------------------------------
+  // TOGGLE WISHLIST
   // ---------------------------------------------------
   const toggleWishlist = async () => {
     if (!user) return alert("Please login to use Wishlist.");
@@ -96,7 +112,7 @@ export default function GameDetails() {
   };
 
   // ---------------------------------------------------
-  // ADMIN DELETE
+  // ADMIN DELETE GAME
   // ---------------------------------------------------
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this game?")) return;
@@ -116,7 +132,7 @@ export default function GameDetails() {
   };
 
   // ---------------------------------------------------
-  // LOADING / NOT FOUND
+  // LOADING OR NOT FOUND
   // ---------------------------------------------------
   if (loading) return <SkeletonGameDetails />;
   if (!game) return <div className="notFound">Game Not Found</div>;
@@ -162,7 +178,7 @@ export default function GameDetails() {
             </button>
           </div>
 
-          {/* ADMIN */}
+          {/* ADMIN ACTIONS */}
           {isAdmin && (
             <div className="adminActions">
               <button

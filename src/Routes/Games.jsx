@@ -1,10 +1,14 @@
 import React from 'react'
-import GamesPage from "../components/GamePage/GamesPage"
+import {fetchGames} from "../api/games"
+import GamePageComponent from "../components/UI/GamePageComponent"
 function Games() {
   return (
     <>
-    <GamesPage />
-
+    
+<GamePageComponent 
+    sectionName="All Games" 
+    fetchGames={fetchGames}
+    />
     </>
   )
 }

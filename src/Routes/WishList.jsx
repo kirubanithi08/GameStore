@@ -1,9 +1,13 @@
 import React from 'react'
-import WishlistPage from '../Pages/WishlistPage'
+import {fetchWishlist} from "../api/games"
+import GamePageComponent from "../components/UI/GamePageComponent"
 function WishList() {
   return (
     <>
-    <WishlistPage />
+    <GamePageComponent 
+        sectionName="WishList" 
+         fetchGames={fetchWishlist}
+        />
     </>
   )
 }

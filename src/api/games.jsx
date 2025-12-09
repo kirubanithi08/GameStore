@@ -13,7 +13,11 @@ export const fetchNewGames = (limit = 4) => api.get(`/games/new?limit=${limit}`)
 
 export const searchGames = (query) => api.get(`/games/search?query=${query}`);
 
-export const fetchGamesPaginated = (page = 0, size = 12) =>
+export const fetchGames= (page = 0, size = 12) =>
   api.get(`/games?page=${page}&size=${size}`);
 
-export const fetchWishlist =()=>api.get(`favorites`)
+export const fetchWishlist =(page=0, size=12)=>
+  api.get(`favorites?page=${page}&size=${size}`)
+
+export const fetchPurchases =(page=0, size=12)=>
+  api.get(`favorites?page=${page}&size=${size}`)

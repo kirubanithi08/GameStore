@@ -4,6 +4,12 @@ import "./GameCard.css";
 export default function GameCard({ game }) {
   return (
     <Link to={`/game/${game.id}`} className="modernGameCard">
+      
+      {/* Wishlist Badge */}
+      {game.wishlisted && (
+        <div className="wishlistBadge">❤️</div>
+      )}
+
       <div className="mgc-img">
         <img src={game.img} alt={game.title} />
       </div>
