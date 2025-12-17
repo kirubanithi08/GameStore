@@ -112,8 +112,8 @@ body {
   flex-wrap: wrap;
 }
 
-.priceBtn,
-.wishlistBtn {
+.priceBtn
+ {
   padding: 12px 28px;
   border-radius: var(--radius);
   border: none;
@@ -131,41 +131,89 @@ body {
   transform: scale(1.05);
 }
 
+
+
+
+
+/* CART BUTTON */
+.cartBtn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cartBtn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+/* WISHLIST BUTTON */
 .wishlistBtn {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 30px;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .wishlistBtn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.16);
+  color: #ff4d6d;
 }
 
-/* --- WISHLIST ICON BUTTON (NEW) --- */
-.wishlistIcon {
-  font-size: 30px;
-  padding: 8px 16px;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  cursor: pointer;
-  transition: 0.25s ease;
-  color: white;
+.wishlistBtn.active {
+  color: #ff4d6d;
+  background: rgba(255, 77, 109, 0.15);
 }
 
-.wishlistIcon:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.05);
+.toast {
+  height:50px;
+  width:100px;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  animation: slideUp 0.7s ease;
 }
 
-.wishlistIcon.wishlisted {
-  background: rgba(255, 0, 0, 0.25);
-  color: #ff4d4d;
+.toast.success {
+  background: #1f2937;
+  color: #fff;
 }
 
-.wishlistIcon.wishlisted:hover {
-  background: rgba(255, 0, 0, 0.35);
-  transform: scale(1.05);
+.toast.error {
+  background: #7f1d1d;
+  color: #fff;
 }
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
+
 
 /* SKELETON LOADER */
 .skeleton {

@@ -8,6 +8,7 @@ function Games() {
 <GamePageComponent 
     sectionName="All Games" 
     fetchGames={fetchGames}
+   
     />
     </>
   )

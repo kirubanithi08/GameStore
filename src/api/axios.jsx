@@ -3,7 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "https://game-store-6uwt.onrender.com/api",
   withCredentials: true,
-  timeout: 50000,
+  timeout: 80000,
 });
 
 

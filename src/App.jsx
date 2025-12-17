@@ -8,6 +8,8 @@ import Buys from "./Routes/Buys";
 import WishList from "./Routes/WishList";
 import Dashboard from "./Routes/Dashboard";
 import GameDetails from "./Pages/GameDetails";
+import Cart from "./Routes/Cart"
+import PaymentSuccess from "./Pages/PaymentSuccess";
 
 // Auth Protection
 import PrivateRoute from "./Router/PrivateRoute";
@@ -42,6 +44,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/cart"
+          element={
+            <PrivateRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <Cart />
+            </PrivateRoute>
+          }
+        />
+
         {/* Admin-only */}
         <Route
           path="/dashboard"
@@ -51,6 +62,11 @@ function App() {
             </PrivateRoute>
           }
         />
+
+{/* <Route path="/checkout/:id" element={<Checkout />} /> */}
+<Route path="/payment-success" element={<PaymentSuccess />} />
+
+
       </Routes>
     </div>
   );

@@ -1,0 +1,66 @@
+.checkoutPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #1f2933, #0f172a);
+  color: white;
+}
+
+.checkoutCard {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.checkoutCard img {
+  width: 350px;
+  object-fit: cover;
+}
+
+.checkoutInfo {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.checkoutInfo h1 {
+  font-size: 2rem;
+}
+
+.priceBox {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.3rem;
+  margin: 20px 0;
+}
+
+.payBtn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.payBtn:hover {
+  transform: scale(1.03);
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid #64748b;
+  padding: 12px;
+  border-radius: 12px;
+  color: #cbd5f5;
+  cursor: pointer;
+}

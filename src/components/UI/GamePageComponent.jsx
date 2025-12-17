@@ -3,68 +3,70 @@ import { searchGames } from "../../api/games";
 
 import GameCard from "../Games/GameCard";
 import SearchBar from "../GamePage/SearchBar";
+import GameCardSkeleton from "../Skeletons/GameCardSkeleton";
+
 import "../GamePage/GamePage.css";
 
-export default function GamePageComponent({
-    sectionName,
-    fetchGames
-}) {
+const PAGE_SIZE = 12;
+
+export default function GamePageComponent({ sectionName, fetchGames }) {
   const [games, setGames] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const size = 12;
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [genre, setGenre] = useState("ALL");
 
-  // ---------------------------------------------------
-  // LOAD GAMES (OR WISHLIST GAMES)
-  // ---------------------------------------------------
-  useEffect(() => {
-    if (!searchQuery.trim()) loadGames();
-  }, [page]);
+  /* ------------------ Helpers ------------------ */
 
-  const loadGames = () => {
-    setLoading(true);
+  const formatGame = (item) => {
+    const g = item.game || item;
 
-    fetchGames(page, size)
-      .then((res) => {
-        const data = res.data;
-
-        // Supports both:
-        // - Page<Favorite> response → content[].game
-        // - Page<Game> response → content[]
-        const content = data?.content ?? data ?? [];
-
-        const formatted = content.map((item) => {
-          const g = item.game || item; // support both return types
-
-          return {
-            id: g.id,
-            title: g.name,
-            img: g.img,
-            cover: g.cover,
-            description: g.description,
-            price: `$${g.price}`,
-            genre: g.genres?.map((x) => x.name) ?? [],
-            wishlisted: !!item.game, // true if it's a Favorite
-          };
-        });
-
-        setGames(formatted);
-        setTotalPages(data?.totalPages ?? 1);
-      })
-      .finally(() => setLoading(false));
+    return {
+      id: g.id,
+      title: g.name,
+      img: g.img,
+      cover: g.cover,
+      description: g.description,
+      price: `$${g.price}`,
+      genre: g.genres?.map((x) => x.name) ?? [],
+      wishlisted: !!item.game,
+    };
   };
 
-  // ---------------------------------------------------
-  // SEARCH SYSTEM
-  // ---------------------------------------------------
+  /* ------------------ Fetch Games ------------------ */
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      loadGames();
+    }
+  }, [page, searchQuery]);
+
+  const loadGames = async () => {
+    setLoading(true);
+    try {
+      const res = await fetchGames(page, PAGE_SIZE);
+      const data = res.data;
+
+      const content = data?.content ?? data ?? [];
+      setGames(content.map(formatGame));
+      setTotalPages(data?.totalPages ?? 1);
+    } catch (err) {
+      console.error("Failed to load games", err);
+      setGames([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ------------------ Search ------------------ */
+
   const handleSearch = async (text) => {
     setSearchQuery(text);
+    setPage(0);
 
     if (!text.trim()) {
       setSearchResults([]);
@@ -74,31 +76,22 @@ export default function GamePageComponent({
     setLoading(true);
     try {
       const res = await searchGames(text);
-
-      const formatted = (res.data ?? []).map((g) => ({
-        id: g.id,
-        title: g.name,
-        img: g.img,
-        cover: g.cover,
-        description: g.description,
-        price: `$${g.price}`,
-        genre: g.genres?.map((x) => x.name) ?? [],
-        wishlisted: false,
-      }));
-
-      setSearchResults(formatted);
+      setSearchResults((res.data ?? []).map(formatGame));
+    } catch (err) {
+      console.error("Search failed", err);
+      setSearchResults([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // ---------------------------------------------------
-  // FILTERS
-  // ---------------------------------------------------
-  const listToShow =
-    (searchQuery ? searchResults : games)?.filter(
-      (g) => genre === "ALL" || g.genre.includes(genre)
-    ) ?? [];
+  /* ------------------ Display Logic ------------------ */
+
+  const listToShow = (searchQuery ? searchResults : games).filter(
+    (g) => genre === "ALL" || g.genre.includes(genre)
+  );
+
+  /* ------------------ Render ------------------ */
 
   return (
     <div className="gamesPage">
@@ -120,27 +113,17 @@ export default function GamePageComponent({
         </select>
       </div>
 
-      {loading ? (
-        <div className="gamesGrid">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div className="skeleton-card" key={i}>
-              <div className="skeleton-img"></div>
-              <div className="skeleton-title"></div>
-              <div className="skeleton-line"></div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="gamesGrid">
-          {listToShow.map((g) => (
-            <GameCard key={g.id} game={g} />
-          ))}
-        </div>
-      )}
+      <div className="gamesGrid">
+        {loading
+          ? Array.from({ length: PAGE_SIZE }).map((_, i) => (
+              <GameCardSkeleton key={i} />
+            ))
+          : listToShow.map((g) => <GameCard key={g.id} game={g} />)}
+      </div>
 
       {!searchQuery && !loading && (
         <div className="pagination">
-          <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+          <button disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
             {"<"}
           </button>
 
@@ -150,7 +133,7 @@ export default function GamePageComponent({
 
           <button
             disabled={page >= totalPages - 1}
-            onClick={() => setPage(page + 1)}
+            onClick={() => setPage((p) => p + 1)}
           >
             {">"}
           </button>

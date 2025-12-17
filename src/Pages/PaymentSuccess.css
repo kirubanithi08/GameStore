@@ -1,0 +1,84 @@
+.successPage {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top, #1b1b1b, #0a0a0a);
+  padding: 20px;
+}
+
+.successCard {
+  background: linear-gradient(180deg, #121212, #0e0e0e);
+  border-radius: 20px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  color: #fff;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: popIn 0.5s ease-out;
+}
+
+.successCard h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.successCard p {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.successCard h2 {
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.successCard img {
+  width: 140px;
+  border-radius: 14px;
+  margin: 16px auto 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Button */
+.successCard button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ff4d4d, #ff0000);
+  color: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.successCard button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(255, 0, 0, 0.35);
+}
+
+.successCard button:active {
+  transform: translateY(0);
+}
+
+/* Entry animation */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { fetchMe } from "../api/auth";
 import GameForm from "../components/Dashboard/GameForm";
+import CheckoutModal from "./CheckoutModel";
+import LoginModal from "../components/Auth/LoginModel";
 import "./GameDetails.css";
 
 export default function GameDetails() {
@@ -17,22 +19,35 @@ export default function GameDetails() {
   const [wishlisted, setWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
+  const [purchased, setPurchased] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+
   const [showForm, setShowForm] = useState(false);
   const [adminLoading, setAdminLoading] = useState(false);
 
-  // ---------------------------------------------------
-  // LOAD USER ONLY IF TOKEN EXISTS
-  // ---------------------------------------------------
+  const [showLogin, setShowLogin] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
+
+  const [toast, setToast] = useState(null);
+
+  /* ===============================
+     HELPERS
+  ================================ */
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  /* ===============================
+     AUTH
+  ================================ */
   useEffect(() => {
     const token =
       localStorage.getItem("jwt") ||
       localStorage.getItem("token") ||
       localStorage.getItem("accessToken");
 
-    if (!token) {
-      setUser(null);
-      return;
-    }
+    if (!token) return;
 
     fetchMe()
       .then((res) => setUser(res.data))
@@ -41,105 +56,111 @@ export default function GameDetails() {
 
   const isAdmin = user?.role === "ROLE_ADMIN";
 
-  // ---------------------------------------------------
-  // LOAD GAME (PUBLIC ENDPOINT)
-  // ---------------------------------------------------
+  /* ===============================
+     LOAD GAME
+  ================================ */
   useEffect(() => {
     async function loadGame() {
       try {
-        const res = await fetch(`https://game-store-6uwt.onrender.com/api/games/${id}`);
+        const res = await fetch(
+          `https://game-store-6uwt.onrender.com/api/games/${id}`
+        );
         const data = await res.json();
-
-        setGame({
-          id: data.id,
-          name: data.name,
-          img: data.img,
-          cover: data.cover,
-          description: data.description,
-          genres: data.genres,
-          price: data.price,
-          featured: data.featured,
-        });
+        setGame(data);
       } catch (err) {
-        console.error("Failed to load game:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     }
-
     loadGame();
   }, [id]);
 
-  // ---------------------------------------------------
-  // CHECK IF GAME IS ALREADY IN WISHLIST
-  // ---------------------------------------------------
+  /* ===============================
+     WISHLIST & PURCHASE STATUS
+  ================================ */
   useEffect(() => {
     if (!user || !game) return;
 
-    async function checkFavorite() {
-      try {
-        const res = await api.get(`/favorites/exists/${game.id}`);
-        setWishlisted(res.data === true);
-      } catch (err) {
-        console.error("Failed to check wishlist", err);
-      }
-    }
+    api.get(`/favorites/exists/${game.id}`)
+      .then((res) => setWishlisted(res.data === true))
+      .catch(() => {});
 
-    checkFavorite();
+    api.get(`/purchases/exists/${game.id}`)
+      .then((res) => setPurchased(res.data === true))
+      .catch(() => {});
   }, [user, game]);
 
-  // ---------------------------------------------------
-  // TOGGLE WISHLIST
-  // ---------------------------------------------------
+  /* ===============================
+     ACTIONS
+  ================================ */
   const toggleWishlist = async () => {
-    if (!user) return alert("Please login to use Wishlist.");
+    if (!user) return setShowLogin(true);
 
     setWishlistLoading(true);
-
     try {
       if (wishlisted) {
         await api.delete(`/favorites/${game.id}`);
         setWishlisted(false);
+        showToast("Removed from wishlist");
       } else {
         await api.post(`/favorites/${game.id}`);
         setWishlisted(true);
+        showToast("Added to wishlist");
       }
-    } catch (err) {
-      console.error("Wishlist toggle error:", err);
+    } catch {
+      showToast("Something went wrong", "error");
     } finally {
       setWishlistLoading(false);
     }
   };
 
-  // ---------------------------------------------------
-  // ADMIN DELETE GAME
-  // ---------------------------------------------------
+  const handleAddToCart = async () => {
+    if (!user) return setShowLogin(true);
+    if (purchased) return;
+
+    setCartLoading(true);
+    try {
+      await api.post(`/cart/${game.id}`);
+      showToast("Added to cart");
+    } catch {
+      showToast("Failed to add to cart", "error");
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this game?")) return;
+    if (!window.confirm("Delete this game?")) return;
 
     setAdminLoading(true);
-
     try {
       await api.delete(`/games/${game.id}`);
-      alert("Game deleted successfully!");
+      showToast("Game deleted");
       navigate("/admin/dashboard");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete game.");
+    } catch {
+      showToast("Delete failed", "error");
     } finally {
       setAdminLoading(false);
     }
   };
 
-  // ---------------------------------------------------
-  // LOADING OR NOT FOUND
-  // ---------------------------------------------------
+  /* ===============================
+     RENDER
+  ================================ */
   if (loading) return <SkeletonGameDetails />;
   if (!game) return <div className="notFound">Game Not Found</div>;
 
   return (
     <div className="gameDetailsPage">
-      {/* Banner */}
+      {/* TOAST */}
+      {toast && (
+        <div className={`toast ${toast.type}`}>
+          {toast.message}
+        </div>
+      )}
+
+      {/* BANNER */}
       <div
         className="gameBanner"
         style={{ backgroundImage: `url(${game.cover})` }}
@@ -147,16 +168,14 @@ export default function GameDetails() {
         <div className="bannerFade"></div>
       </div>
 
-      {/* Main Content */}
+      {/* CONTENT */}
       <div className="gameMainContent">
-        {/* LEFT */}
         <div className="coverCard">
           <img src={game.img} alt={game.name} />
         </div>
 
-        {/* RIGHT */}
         <div className="infoPanel">
-          <h1 className="title">{game.name}</h1>
+          <h1>{game.name}</h1>
 
           <div className="genreList">
             {game.genres?.map((g, i) => (
@@ -167,33 +186,40 @@ export default function GameDetails() {
           <p className="description">{game.description}</p>
 
           <div className="purchaseRow">
-            <button className="priceBtn">Buy — ${game.price}</button>
+            <button
+              className="priceBtn"
+              disabled={purchased}
+              onClick={() => {
+                if (!user) return setShowLogin(true);
+                setShowCheckout(true);
+              }}
+            >
+              {purchased ? "Owned" : `Buy — $${game.price}`}
+            </button>
 
             <button
-              className={`wishlistIcon ${wishlisted ? "wishlisted" : ""}`}
+              className="cartBtn"
+              onClick={handleAddToCart}
+              disabled={cartLoading || purchased}
+              title={purchased ? "Already owned" : "Add to cart"}
+            >
+              🛒
+            </button>
+
+            <button
+              className={`wishlistBtn ${wishlisted ? "active" : ""}`}
               onClick={toggleWishlist}
               disabled={wishlistLoading}
+              title="Wishlist"
             >
-              {wishlisted ? "❤️" : "🤍"}
+              ♥
             </button>
           </div>
 
-          {/* ADMIN ACTIONS */}
           {isAdmin && (
             <div className="adminActions">
-              <button
-                className="adminBtn"
-                onClick={() => setShowForm(true)}
-                disabled={adminLoading}
-              >
-                Edit
-              </button>
-
-              <button
-                className="adminBtn"
-                onClick={handleDelete}
-                disabled={adminLoading}
-              >
+              <button onClick={() => setShowForm(true)} className="adminBtn">Edit</button>
+              <button onClick={handleDelete} className="adminBtn">
                 {adminLoading ? "Deleting..." : "Delete"}
               </button>
             </div>
@@ -201,39 +227,30 @@ export default function GameDetails() {
         </div>
       </div>
 
-      {/* Admin Edit Form */}
+      {showCheckout && !purchased && (
+        <CheckoutModal
+          gameId={game.id}
+          onClose={() => setShowCheckout(false)}
+        />
+      )}
+
       {showForm && (
         <GameForm
           game={game}
-          onClose={() => {
-            setShowForm(false);
-
-            // refresh game data after editing
-            setLoading(true);
-            api
-              .get(`/games/${game.id}`)
-              .then((res) => {
-                const data = res.data;
-                setGame({
-                  id: data.id,
-                  name: data.name,
-                  img: data.img,
-                  cover: data.cover,
-                  description: data.description,
-                  genres: data.genres,
-                  price: data.price,
-                  featured: data.featured,
-                });
-              })
-              .finally(() => setLoading(false));
-          }}
+          onClose={() => setShowForm(false)}
         />
+      )}
+
+      {showLogin && (
+        <LoginModal onClose={() => setShowLogin(false)} />
       )}
     </div>
   );
 }
 
-/* Skeleton Loader */
+/* ===============================
+   SKELETON
+================================ */
 function SkeletonGameDetails() {
   return (
     <div className="gameDetailsPage">
@@ -242,7 +259,6 @@ function SkeletonGameDetails() {
         <div className="coverCard skeletonBox"></div>
         <div className="infoPanel">
           <div className="skeletonText titleSkeleton"></div>
-          <div className="skeletonText shortSkeleton"></div>
           <div className="skeletonText longSkeleton"></div>
           <div className="skeletonBtn"></div>
         </div>
