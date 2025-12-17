@@ -1,8 +1,14 @@
 import React from 'react'
-
+import {fetchCart} from "../api/games"
+import GamePageComponent from "../components/UI/GamePageComponent"
 function Cart() {
   return (
-    <div>Cart</div>
+     <>
+    <GamePageComponent 
+        sectionName="WishList" 
+         fetchGames={fetchCart}
+        />
+    </>
   )
 }
 

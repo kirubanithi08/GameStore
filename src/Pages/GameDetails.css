@@ -148,8 +148,13 @@ body {
 }
 
 .cartBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  transform: translateY(-1px);
+ background: rgba(255, 255, 255, 0.16);
+  color:#fff;
+}
+
+.cartBtn.active{
+   background:white;
+  color:black;
 }
 
 /* WISHLIST BUTTON */

@@ -24,6 +24,13 @@ export const fetchWishlist = (page = 0, size = 12) =>
     params: { page, size }
   });
 
+  export const fetchCart = (page = 0, size = 12) =>
+  api.get(`/cart`, {
+    params: { page, size }
+  });
 
-export const fetchPurchases =(page=0, size=12)=>
-  api.get(`favorites?page=${page}&size=${size}`)
+
+ export const fetchBuys = (page = 0, size = 12) =>
+  api.get(`/purchase`, {
+    params: { page, size }
+  });

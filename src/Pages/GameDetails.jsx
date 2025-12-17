@@ -28,6 +28,7 @@ export default function GameDetails() {
   const [showLogin, setShowLogin] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
 
+  const [inCart, setInCart] = useState(false);
   const [toast, setToast] = useState(null);
 
   /* ===============================
@@ -80,16 +81,19 @@ export default function GameDetails() {
      WISHLIST & PURCHASE STATUS
   ================================ */
   useEffect(() => {
-    if (!user || !game) return;
+  if (!user || !game) return;
 
-    api.get(`/favorites/exists/${game.id}`)
-      .then((res) => setWishlisted(res.data === true))
-      .catch(() => {});
+  api.get(`/favorites/exists/${game.id}`)
+    .then((res) => setWishlisted(res.data === true));
 
-    api.get(`/purchases/exists/${game.id}`)
-      .then((res) => setPurchased(res.data === true))
-      .catch(() => {});
-  }, [user, game]);
+  api.get(`/purchase/exists/${game.id}`)
+    .then((res) => setPurchased(res.data === true));
+
+  api.get(`/cart/exists/${game.id}`)
+    .then((res) => setInCart(res.data === true))
+    .catch(() => {});
+}, [user, game]);
+
 
   /* ===============================
      ACTIONS
@@ -115,20 +119,45 @@ export default function GameDetails() {
     }
   };
 
-  const handleAddToCart = async () => {
-    if (!user) return setShowLogin(true);
-    if (purchased) return;
+  // const handleAddToCart = async () => {
+  //   if (!user) return setShowLogin(true);
+  //   if (purchased) return;
 
-    setCartLoading(true);
-    try {
+  //   setCartLoading(true);
+  //   try {
+  //     await api.post(`/cart/${game.id}`);
+  //     showToast("Added to cart");
+  //   } catch {
+  //     showToast("Failed to add to cart", "error");
+  //   } finally {
+  //     setCartLoading(false);
+  //   }
+  // };
+
+
+const handleAddToCart = async () => {
+  if (!user) return setShowLogin(true);
+  if (purchased) return;
+
+  setCartLoading(true);
+  try {
+    if (inCart) {
+      await api.delete(`/cart/${game.id}`);
+      setInCart(false);
+      showToast("Removed from cart");
+    } else {
       await api.post(`/cart/${game.id}`);
+      setInCart(true);
       showToast("Added to cart");
-    } catch {
-      showToast("Failed to add to cart", "error");
-    } finally {
-      setCartLoading(false);
     }
-  };
+  } catch {
+    showToast("Cart action failed", "error");
+  } finally {
+    setCartLoading(false);
+  }
+};
+
+
 
   const handleDelete = async () => {
     if (!window.confirm("Delete this game?")) return;
@@ -145,9 +174,7 @@ export default function GameDetails() {
     }
   };
 
-  /* ===============================
-     RENDER
-  ================================ */
+  
   if (loading) return <SkeletonGameDetails />;
   if (!game) return <div className="notFound">Game Not Found</div>;
 
@@ -197,14 +224,25 @@ export default function GameDetails() {
               {purchased ? "Owned" : `Buy — $${game.price}`}
             </button>
 
-            <button
+            {/* <button
               className="cartBtn"
               onClick={handleAddToCart}
               disabled={cartLoading || purchased}
               title={purchased ? "Already owned" : "Add to cart"}
             >
               🛒
-            </button>
+            </button> */}
+
+            <button
+  className={`cartBtn ${inCart ? "active" : ""}`}
+  onClick={handleAddToCart}
+  disabled={cartLoading || purchased}
+  title={purchased ? "Already owned" : inCart ? "Remove from cart" : "Add to cart"}
+>
+  {/* {inCart ? "🗑️" : "🛒"} */}
+   🛒
+</button>
+
 
             <button
               className={`wishlistBtn ${wishlisted ? "active" : ""}`}

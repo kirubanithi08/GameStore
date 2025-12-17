@@ -50,7 +50,7 @@ export default function Sidebar() {
 
                 <li>
                   <NavLink to="/cart" className="nav-link">
-                    <i className="fa-solid fa-cart"></i>
+                    <i className="fa-solid fa-cart-shopping"></i>
                     Cart
                   </NavLink>
                 </li>
