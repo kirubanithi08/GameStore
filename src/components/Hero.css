@@ -6,7 +6,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .hero{
          margin: 85px 0 0 20px;
           display: inline-block; 
