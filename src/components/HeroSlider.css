@@ -214,9 +214,19 @@
   animation: pulse 1.5s infinite ease-in-out;
 }
 
-/* Animations */
+
 @keyframes pulse {
   0% { opacity: 0.4; }
   50% { opacity: 1; }
   100% { opacity: 0.4; }
+}
+
+
+@media (max-width: 750px) {
+   .heroSlider {
+  position: relative;
+  width: 130%;
+  height: 430px;
+ 
+}
 }

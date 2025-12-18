@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
@@ -11,10 +10,16 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // 👈 NEW
 
   return (
     <>
-      <aside className="sidebar">
+      {/* Hamburger Button (Mobile only) */}
+      <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+        ☰
+      </button>
+
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <h1 className="logo">
             G<span>Store</span>
@@ -23,40 +28,38 @@ export default function Sidebar() {
 
         <nav className="sidebar-nav">
           <ul>
-           
             <li>
-              <NavLink to="/" className="nav-link">
+              <NavLink to="/" className="nav-link" onClick={() => setIsOpen(false)}>
                 <i className="fa-solid fa-house"></i>
                 Home
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/games" className="nav-link">
+              <NavLink to="/games" className="nav-link" onClick={() => setIsOpen(false)}>
                 <i className="fas fa-gamepad"></i>
                 Games
               </NavLink>
             </li>
 
-           
             {user && (
               <>
                 <li>
-                  <NavLink to="/wishlist" className="nav-link">
+                  <NavLink to="/wishlist" className="nav-link" onClick={() => setIsOpen(false)}>
                     <i className="fa-solid fa-heart"></i>
                     Wishlist
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/cart" className="nav-link">
+                  <NavLink to="/cart" className="nav-link" onClick={() => setIsOpen(false)}>
                     <i className="fa-solid fa-cart-shopping"></i>
                     Cart
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/buys" className="nav-link">
+                  <NavLink to="/buys" className="nav-link" onClick={() => setIsOpen(false)}>
                     <i className="fa-solid fa-bag-shopping"></i>
                     Purchases
                   </NavLink>
@@ -64,10 +67,9 @@ export default function Sidebar() {
               </>
             )}
 
-            
             {user?.role === "ROLE_ADMIN" && (
               <li>
-                <NavLink to="/dashboard" className="nav-link">
+                <NavLink to="/dashboard" className="nav-link" onClick={() => setIsOpen(false)}>
                   <i className="fas fa-user-shield"></i>
                   Dashboard
                 </NavLink>
@@ -82,10 +84,7 @@ export default function Sidebar() {
               <button className="login-btn" onClick={() => setShowLogin(true)}>
                 Login
               </button>
-              <button
-                className="register-btn"
-                onClick={() => setShowRegister(true)}
-              >
+              <button className="register-btn" onClick={() => setShowRegister(true)}>
                 Register
               </button>
             </>

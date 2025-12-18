@@ -1,5 +1,4 @@
 
-
 import { useEffect, useState } from "react";
 import { fetchNewGames } from "../../api/games";
 import GameSection from "../Home/GameSection";

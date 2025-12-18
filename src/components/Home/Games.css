@@ -96,3 +96,11 @@
   background: #3aa3ff;
   color: #fff;
 }
+
+@media (max-width: 750px) {
+    .gameSection {
+  margin: 20px;
+  padding: 20px;
+ 
+}
+}

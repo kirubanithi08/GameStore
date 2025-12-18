@@ -96,3 +96,9 @@
     transition: none;
   }
 }
+
+@media (max-width: 750px) {
+    .modernGameCard {
+         width:150px;
+    }
+}
