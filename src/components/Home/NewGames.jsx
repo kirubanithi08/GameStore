@@ -1,8 +1,6 @@
-
 import { useEffect, useState } from "react";
 import { fetchNewGames } from "../../api/games";
 import GameSection from "../Home/GameSection";
-
 
 export default function NewGames() {
   const [games, setGames] = useState([]);
@@ -11,20 +9,30 @@ export default function NewGames() {
   useEffect(() => {
     fetchNewGames(5)
       .then((res) => {
-        const formatted = res.data.map(game => ({
+        const formatted = res.data.map((game) => ({
           id: game.id,
           title: game.name,
           img: game.img,
           description: game.description,
-          price: `$${game.price}`, 
-          genre: game.genres.map(g => g.name)
+          price: `$${game.price}`,
+          genre: game.genres.map((g) => g.name),
         }));
+
         setGames(formatted);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch new games", err);
+        setGames([]);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="loading">Loading New Games...</p>;
-
-  return <GameSection title="New Releases" games={games} showArrow={true} />;
+  return (
+    <GameSection
+      title="New Releases"
+      games={games}
+      loading={loading}
+      showArrow={true}
+    />
+  );
 }

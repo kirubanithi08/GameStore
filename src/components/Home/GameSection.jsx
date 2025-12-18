@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import GameCard from "../Games/GameCard";
+import GameCardSkeleton from "../Skeletons/GameCardSkeleton";
 import "../Home/Games.css";
 
-export default function GameSection({ title, games, showArrow }) {
+const PAGE_SIZE = 6;
+
+export default function GameSection({
+  title,
+  games = [],
+  loading = false,
+  showArrow = false,
+}) {
   const navigate = useNavigate();
 
   return (
     <div className="gameSection">
-
       <div className="sectionHeader">
         <h2>{title}</h2>
 
@@ -22,9 +29,13 @@ export default function GameSection({ title, games, showArrow }) {
       </div>
 
       <div className="gameGrid">
-        {games.map((g) => (
-          <GameCard key={g.id} game={g} />
-        ))}
+        {loading
+          ? Array.from({ length: PAGE_SIZE }).map((_, i) => (
+              <GameCardSkeleton key={i} />
+            ))
+          : games.map((g) => (
+              <GameCard key={g.id} game={g} />
+            ))}
       </div>
     </div>
   );

@@ -103,4 +103,9 @@
   padding: 20px;
  
 }
+.gameGrid {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 }

@@ -60,7 +60,7 @@
   background: #444;
 }
 
-@media (max-width:750px){
+/* @media (max-width:750px){
   .gamesPage {
   margin-left: 20px;
   padding: 20px;
@@ -69,4 +69,27 @@
 .searchInput {
   width: 180px;
 }
+
+.gamesGrid {
+  
+  width:130px;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+} */
+
+@media (max-width: 750px) {
+  .gamesPage {
+    margin-left: 20px;
+    padding: 20px;
+  }
+
+  .searchInput {
+    width: 180px;
+  }
+
+  .gamesGrid {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 }

@@ -25,8 +25,7 @@
 .searchDropdown {
   position: absolute;
   top: 45px;
-  /* width: 100%; */
-width: 92%;
+  width: 92%;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(12px);
   padding: 8px;
@@ -87,23 +86,12 @@ width: 92%;
    .liveSearchWrap {
   position: relative;
   width: 260px;
-}
- 
-.liveInput {
-   position: relative;
-  width: 99%;
-  height: 38px;
-  padding: 0 12px;
-  font-size: 14px;
-  outline: none;
-  transition: 0.25s ease;
-  bottom: 500px;
+   bottom: 500px;
   left: 40px;
 }
-
-.noResults {
-  position: relative;
-  bottom: 480px;
-   left: 40px;
+ 
+.noResults,
+.searchDropdown{
+  z-index: 66;
 }
 }

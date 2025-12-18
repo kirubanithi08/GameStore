@@ -20,7 +20,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
 
   const [genre, setGenre] = useState("ALL");
 
-  /* ------------------ Helpers ------------------ */
+  
 
   const formatGame = (item) => {
     const g = item.game || item;
@@ -37,7 +37,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     };
   };
 
-  /* ------------------ Fetch Games ------------------ */
+  
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -62,7 +62,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     }
   };
 
-  /* ------------------ Search ------------------ */
+  
 
   const handleSearch = async (text) => {
     setSearchQuery(text);
@@ -85,13 +85,12 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     }
   };
 
-  /* ------------------ Display Logic ------------------ */
-
+  
   const listToShow = (searchQuery ? searchResults : games).filter(
     (g) => genre === "ALL" || g.genre.includes(genre)
   );
 
-  /* ------------------ Render ------------------ */
+  
 
   return (
     <div className="gamesPage">

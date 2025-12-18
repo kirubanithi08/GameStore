@@ -1,5 +1,5 @@
 .modernGameCard {
-  position: relative; /* IMPORTANT for wishlist badge */
+  position: relative; 
   background: #181818;
   border-radius: 12px;
   overflow: hidden;
@@ -12,7 +12,7 @@
   box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 
-/* Hover & focus */
+
 .modernGameCard:hover,
 .modernGameCard:focus-visible {
   transform: translateY(-6px);
@@ -98,7 +98,7 @@
 }
 
 @media (max-width: 750px) {
-    .modernGameCard {
+    /* .modernGameCard {
          width:150px;
-    }
+    } */
 }

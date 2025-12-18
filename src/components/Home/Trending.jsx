@@ -25,7 +25,12 @@ export default function Trending() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="loading">Loading Trending Games...</p>;
-
-  return <GameSection title="Trending Now" games={games} showArrow={false} />;
+   return (
+      <GameSection
+        title="New Releases"
+        games={games}
+        loading={loading}
+        showArrow={true}
+      />
+    );
 }
