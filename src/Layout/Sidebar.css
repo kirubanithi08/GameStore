@@ -145,6 +145,21 @@
   .sidebar.open {
     transform: translateX(0);
   }
+
+  .auth-actions {
+    position: relative;
+ bottom: 120px;
+}
+
+.sidebar-nav{
+  position: relative;
+  bottom: 60px;
+}
+
+.sidebar-header{
+  position: relative;
+  top: 40px;
+}
 }
 
 /* .main-content {
