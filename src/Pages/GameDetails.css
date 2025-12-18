@@ -293,3 +293,22 @@ body {
   gap: 20px;
   flex-wrap: wrap;
 }
+
+
+@media screen and (max-width:900px) {
+  .gameDetailsPage {
+  padding-left: 0;
+  /* min-height: 100vh;
+  overflow-x: hidden; */
+}
+.coverCard{
+  position: relative;
+  right: 6px;
+}
+
+.infoPanel {
+ position: relative;
+ right: 52px;
+}
+
+}

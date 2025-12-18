@@ -119,20 +119,7 @@ export default function GameDetails() {
     }
   };
 
-  // const handleAddToCart = async () => {
-  //   if (!user) return setShowLogin(true);
-  //   if (purchased) return;
 
-  //   setCartLoading(true);
-  //   try {
-  //     await api.post(`/cart/${game.id}`);
-  //     showToast("Added to cart");
-  //   } catch {
-  //     showToast("Failed to add to cart", "error");
-  //   } finally {
-  //     setCartLoading(false);
-  //   }
-  // };
 
 
 const handleAddToCart = async () => {
