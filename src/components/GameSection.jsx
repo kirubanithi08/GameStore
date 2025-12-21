@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import GameCard from "../Games/GameCard";
-import GameCardSkeleton from "../Skeletons/GameCardSkeleton";
-import "../Home/Games.css";
+import GameCard from "./GameCard";
+import GameCardSkeleton from "./Skeletons/GameCardSkeleton";
+import "./Games.css";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 5;
 
 export default function GameSection({
   title,

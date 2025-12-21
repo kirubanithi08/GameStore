@@ -1,6 +1,6 @@
 import React from 'react'
 import {fetchGames} from "../api/games"
-import GamePageComponent from "../components/UI/GamePageComponent"
+import GamePageComponent from "../components/GamePageComponent"
 function Games() {
   return (
     <>

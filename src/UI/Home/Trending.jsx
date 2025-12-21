@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchTrendingGames } from "../../api/games";
-import GameSection from "../Home/GameSection";
+import GameSection from "../../components/GameSection";
 
 export default function Trending() {
   const [games, setGames] = useState([]);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchNewGames } from "../../api/games";
-import GameSection from "../Home/GameSection";
+import GameSection from "../../components/GameSection";
 
 export default function NewGames() {
   const [games, setGames] = useState([]);

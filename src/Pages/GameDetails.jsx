@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { fetchMe } from "../api/auth";
-import GameForm from "../components/Dashboard/GameForm";
+import GameForm from "../UI/Dashboard/GameForm";
 import CheckoutModal from "./CheckoutModel";
-import LoginModal from "../components/Auth/LoginModel";
+import LoginModal from "../UI/Auth/LoginModel";
 import "./GameDetails.css";
 
 export default function GameDetails() {
@@ -31,17 +31,13 @@ export default function GameDetails() {
   const [inCart, setInCart] = useState(false);
   const [toast, setToast] = useState(null);
 
-  /* ===============================
-     HELPERS
-  ================================ */
+  
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
 
-  /* ===============================
-     AUTH
-  ================================ */
+  
   useEffect(() => {
     const token =
       localStorage.getItem("jwt") ||
@@ -57,9 +53,7 @@ export default function GameDetails() {
 
   const isAdmin = user?.role === "ROLE_ADMIN";
 
-  /* ===============================
-     LOAD GAME
-  ================================ */
+  
   useEffect(() => {
     async function loadGame() {
       try {
@@ -77,9 +71,7 @@ export default function GameDetails() {
     loadGame();
   }, [id]);
 
-  /* ===============================
-     WISHLIST & PURCHASE STATUS
-  ================================ */
+ 
   useEffect(() => {
   if (!user || !game) return;
 
@@ -95,9 +87,7 @@ export default function GameDetails() {
 }, [user, game]);
 
 
-  /* ===============================
-     ACTIONS
-  ================================ */
+ 
   const toggleWishlist = async () => {
     if (!user) return setShowLogin(true);
 
@@ -167,14 +157,14 @@ const handleAddToCart = async () => {
 
   return (
     <div className="gameDetailsPage">
-      {/* TOAST */}
+     
       {toast && (
         <div className={`toast ${toast.type}`}>
           {toast.message}
         </div>
       )}
 
-      {/* BANNER */}
+     
       <div
         className="gameBanner"
         style={{ backgroundImage: `url(${game.cover})` }}
@@ -182,7 +172,7 @@ const handleAddToCart = async () => {
         <div className="bannerFade"></div>
       </div>
 
-      {/* CONTENT */}
+      
       <div className="gameMainContent">
         <div className="coverCard">
           <img src={game.img} alt={game.name} />
@@ -211,14 +201,6 @@ const handleAddToCart = async () => {
               {purchased ? "Owned" : `Buy — $${game.price}`}
             </button>
 
-            {/* <button
-              className="cartBtn"
-              onClick={handleAddToCart}
-              disabled={cartLoading || purchased}
-              title={purchased ? "Already owned" : "Add to cart"}
-            >
-              🛒
-            </button> */}
 
             <button
   className={`cartBtn ${inCart ? "active" : ""}`}
@@ -226,7 +208,7 @@ const handleAddToCart = async () => {
   disabled={cartLoading || purchased}
   title={purchased ? "Already owned" : inCart ? "Remove from cart" : "Add to cart"}
 >
-  {/* {inCart ? "🗑️" : "🛒"} */}
+ 
    🛒
 </button>
 
@@ -273,9 +255,7 @@ const handleAddToCart = async () => {
   );
 }
 
-/* ===============================
-   SKELETON
-================================ */
+/*SKELETON */
 function SkeletonGameDetails() {
   return (
     <div className="gameDetailsPage">

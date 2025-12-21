@@ -1,11 +1,11 @@
 import React from 'react'
 import {fetchBuys} from "../api/games"
-import GamePageComponent from "../components/UI/GamePageComponent"
+import GamePageComponent from "../components/GamePageComponent"
 function Buys() {
   return (
    <>
        <GamePageComponent 
-           sectionName="My Games" 
+           sectionName="Purchases" 
             fetchGames={fetchBuys}
            />
        </>

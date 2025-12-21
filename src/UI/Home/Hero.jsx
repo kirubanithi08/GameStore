@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Hero.css";
 import Search from './Search';
 import HeroSlider from "./HeroSlider";
-import { fetchFeaturedGames } from "../api/games";
+import { fetchFeaturedGames } from "../../api/games";
 
 function Hero() {
   const [slides, setSlides] = useState([]);
@@ -32,7 +32,28 @@ function Hero() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="loading">Loading featured games...</p>;
+  if (loading) return (
+    <div className="heroSlider skeleton-hero">
+      <div className="heroSkeletonImg" />
+
+      <div className="heroSkeletonTags">
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <div className="heroShadow" />
+
+      <div className="heroSkeletonInfo">
+        <div className="heroSkeletonText">
+          <div className="heroSkeletonTitle" />
+          <div className="heroSkeletonDesc" />
+        </div>
+
+        <div className="heroSkeletonBtn" />
+      </div>
+    </div>
+  );
 
   return (
     <div className='hero'>

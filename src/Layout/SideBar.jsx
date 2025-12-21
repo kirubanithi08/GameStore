@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-import LoginModal from "../components/Auth/LoginModel";
-import RegisterModal from "../components/Auth/RegisterModel";
+import LoginModal from "../UI/Auth/LoginModel";
+import RegisterModal from "../UI/Auth/RegisterModel";
 import { useAuth } from "../Context/AuthContext";
 import "./Sidebar.css";
 
@@ -14,7 +14,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Hamburger Button (Mobile only) */}
+      
       <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
         ☰
       </button>

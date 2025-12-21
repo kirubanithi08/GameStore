@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import api from "../../api/axios";
-import "./Dashboard.css";
+import "./AdminDashboard.css";
 
 export default function GameForm({ onClose, game }) {
   const [form, setForm] = useState({

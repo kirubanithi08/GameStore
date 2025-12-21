@@ -1,4 +1,3 @@
-
 .heroSlider {
   position: relative;
   width: 100%;
@@ -6,6 +5,7 @@
   overflow: hidden;
   border-radius: 12px;
 }
+
 
 
 .fade {
@@ -16,6 +16,7 @@
   from { opacity: 0.4; }
   to { opacity: 1; }
 }
+
 
 
 .heroImg {
@@ -30,6 +31,7 @@
 .heroImg:hover {
   transform: scale(1.01);
 }
+
 
 
 .genreTags {
@@ -48,8 +50,8 @@
   border-radius: 6px;
   color: #fff;
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.3);
 }
+
 
 
 .heroInfo {
@@ -62,80 +64,107 @@
   z-index: 6;
 }
 
-.heroText {
-  cursor: pointer;
-}
-
 .heroText h2 {
+  color: white;
   margin: 0;
   font-size: 28px;
-  color: white;
-  text-shadow: 0px 3px 6px rgba(0,0,0,0.7);
 }
 
 .heroText p {
   color: #ddd;
-  opacity: 0.85;
   max-width: 450px;
 }
-
 
 .heroPrice {
   margin-left: auto;
   padding: 12px 50px;
-  font-weight: bold;
-
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-
   background: linear-gradient(90deg, #3a8bff, #4fd1ff);
+  border: none;
+  border-radius: 6px;
   color: white;
-  transition: 0.3s ease;
-}
-
-.heroPrice:hover {
-  opacity: 0.9;
-  transform: scale(1.03);
+  font-weight: bold;
+  cursor: pointer;
 }
 
 
-.prevBtn, 
+
+.prevBtn,
 .nextBtn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  padding: 12px 18px;
-
   background: rgba(0,0,0,0.5);
   border: none;
-
-  color: #fff;
   font-size: 24px;
-
+  color: white;
   cursor: pointer;
+  padding: 12px 18px;
   border-radius: 6px;
   z-index: 10;
-  transition: 0.25s;
-}
-
-.prevBtn:hover,
-.nextBtn:hover {
-  background: rgba(0,0,0,0.8);
 }
 
 .prevBtn { left: 15px; }
 .nextBtn { right: 15px; }
 
 
+
 .heroShadow {
   position: absolute;
   bottom: 0;
-  width: 100%;
   height: 180px;
+  width: 100%;
   background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  border-radius: 0 0 12px 12px;
   z-index: 4;
+}
+
+
+.skeleton-hero div {
+  background: #2a2a2a;
+  animation: pulse 1.5s infinite;
+  border-radius: 6px;
+}
+
+.heroSkeletonImg {
+  height: 100%;
+}
+
+.heroSkeletonTags {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.heroSkeletonTags span {
+  width: 60px;
+  height: 22px;
+}
+
+.heroSkeletonInfo {
+  position: absolute;
+  bottom: 35px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.heroSkeletonTitle {
+  width: 260px;
+  height: 28px;
+}
+
+.heroSkeletonDesc {
+  width: 400px;
+  height: 18px;
+  margin-top: 10px;
+}
+
+.heroSkeletonBtn {
+  margin-left: auto;
+  width: 160px;
+  height: 42px;
 }
 
 @keyframes pulse {
@@ -145,35 +174,27 @@
 }
 
 
+
 @media (max-width: 900px) {
-   .heroSlider {
-  position: relative;
-  width: 100%;
-  height: 430px;
- 
-}
+  .heroImg {
+    width: 95%;
+    height: 27rem;
+  }
 
-.heroImg {
-  width: 95%;
-  height: 27rem;
-  object-fit: cover;
-}
+  .heroText p {
+    display: none;
+  }
 
-.heroInfo p{
-  display:none;
-}
+  .heroText h2 {
+    font-size: 20px;
+  }
 
-.heroInfo h2{
-  position: relative;
-   font-size: 20px;
-   bottom: 30px;
-}
-.heroShadow {
- 
-  width: 95%;
-  height: 90px;
-  z-index: 4;
-}
+  .heroShadow {
+    width: 95%;
+    height: 90px;
+  }
 
-.nextBtn { right: 30px; }
+  .nextBtn {
+    right: 30px;
+  }
 }

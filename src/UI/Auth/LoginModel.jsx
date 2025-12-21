@@ -15,12 +15,6 @@ export default function LoginModal({ onClose }) {
     try {
       const { data } = await loginUser(form);
 
-      // call global login function
-      // login(data.accessToken, {
-      //   username: data.username,
-      //   role: data.role,
-      // });
-
       login(data.accessToken, {
   username: data.username,
   role: data.role?.toUpperCase()      

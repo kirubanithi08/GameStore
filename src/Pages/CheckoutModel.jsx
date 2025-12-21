@@ -19,10 +19,10 @@ export default function CheckoutModal({ gameId, onClose }) {
     setError(null);
 
     try {
-      // Fake payment delay
+      
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // ✅ Add game to purchased list
+      
       await api.post(`/purchases/${gameId}`);
 
       alert("Payment successful! Game added to your library 🎮");

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GameForm from "./GameForm";
 import api from "../../api/axios";
-import "./Dashboard.css";
+import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const [showForm, setShowForm] = useState(false);

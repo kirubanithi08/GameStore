@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchGames } from "../api/games";
+import { searchGames } from "../../api/games";
 import "./Search.css";
 
 export default function Search() {

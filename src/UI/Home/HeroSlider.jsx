@@ -1,38 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HeroSlider.css";
+
 
 function HeroSlider({ slides = [], loading = false }) {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
-  /* ---------------- Skeleton ---------------- */
   if (loading) {
     return <HeroSliderSkeleton />;
   }
 
-  const current = slides[index] || {
-    id: "",
-    title: "",
-    text: "",
-    cover: "",
-    genre: [],
-    price: "",
+  const current = slides[index] || {};
+
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % slides.length);
   };
 
-  const nextSlide = () =>
-    setIndex((prev) => (slides.length ? (prev + 1) % slides.length : 0));
-
-  const prevSlide = () =>
-    setIndex((prev) =>
-      slides.length ? (prev - 1 + slides.length) % slides.length : 0
-    );
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   useEffect(() => {
     if (!slides.length) return;
     const timer = setInterval(nextSlide, 7000);
     return () => clearInterval(timer);
-  }, [index, slides]);
+  }, [slides, index]);
 
   const openGame = () => {
     if (current.id) navigate(`/game/${current.id}`);
@@ -41,27 +34,29 @@ function HeroSlider({ slides = [], loading = false }) {
   return (
     <div className="heroSlider">
       <div className="slide fade">
-        {/* Genre Tags */}
+       
         <div className="genreTags">
           {current.genre?.map((g) => (
-            <span key={g} className="genreTag">{g}</span>
+            <span key={g} className="genreTag">
+              {g}
+            </span>
           ))}
         </div>
 
-        {/* Image */}
+        
         {current.cover && (
           <img
-            className="heroImg"
             src={current.cover}
             alt={current.title}
+            className="heroImg"
             onClick={openGame}
           />
         )}
 
-        {/* Shadow */}
-        <div className="heroShadow"></div>
+       
+        <div className="heroShadow" />
 
-        {/* Info */}
+       
         <div className="heroInfo">
           <div className="heroText" onClick={openGame}>
             <h2>{current.title}</h2>
@@ -75,11 +70,15 @@ function HeroSlider({ slides = [], loading = false }) {
           )}
         </div>
 
-        {/* Controls */}
+       
         {slides.length > 1 && (
           <>
-            <button className="prevBtn" onClick={prevSlide}>❮</button>
-            <button className="nextBtn" onClick={nextSlide}>❯</button>
+            <button className="prevBtn" onClick={prevSlide}>
+              ❮
+            </button>
+            <button className="nextBtn" onClick={nextSlide}>
+              ❯
+            </button>
           </>
         )}
       </div>
@@ -87,7 +86,7 @@ function HeroSlider({ slides = [], loading = false }) {
   );
 }
 
-/* ---------------- Skeleton Component ---------------- */
+
 
 function HeroSliderSkeleton() {
   return (

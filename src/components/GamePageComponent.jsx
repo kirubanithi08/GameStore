@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { searchGames } from "../../api/games";
+import { searchGames } from "../api/games";
 
-import GameCard from "../Games/GameCard";
-import SearchBar from "../GamePage/SearchBar";
-import GameCardSkeleton from "../Skeletons/GameCardSkeleton";
+import GameCard from "./GameCard";
+import SearchBar from "./SearchBar";
+import GameCardSkeleton from "./Skeletons/GameCardSkeleton";
 
-import "../GamePage/GamePage.css";
+import "./GamePage.css";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 export default function GamePageComponent({ sectionName, fetchGames }) {
   const [games, setGames] = useState([]);
@@ -32,7 +32,9 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
       cover: g.cover,
       description: g.description,
       price: `$${g.price}`,
-      genre: g.genres?.map((x) => x.name) ?? [],
+      // genre: g.genres?.map((x) => x.name) ?? [],
+      genre: g.genres?.map(x => typeof x === "string" ? x : x.name) ?? [],
+
       wishlisted: !!item.game,
     };
   };
