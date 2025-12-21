@@ -2,16 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HeroSlider.css";
 
-
-function HeroSlider({ slides = [], loading = false }) {
+function HeroSlider({ slides = [] }) {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
-  if (loading) {
-    return <HeroSliderSkeleton />;
-  }
+  if (!slides.length) return null;
 
-  const current = slides[index] || {};
+  const current = slides[index];
 
   const nextSlide = () => {
     setIndex((prev) => (prev + 1) % slides.length);
@@ -22,10 +19,10 @@ function HeroSlider({ slides = [], loading = false }) {
   };
 
   useEffect(() => {
-    if (!slides.length) return;
+    if (slides.length <= 1) return;
     const timer = setInterval(nextSlide, 7000);
     return () => clearInterval(timer);
-  }, [slides, index]);
+  }, [slides.length]);
 
   const openGame = () => {
     if (current.id) navigate(`/game/${current.id}`);
@@ -34,16 +31,15 @@ function HeroSlider({ slides = [], loading = false }) {
   return (
     <div className="heroSlider">
       <div className="slide fade">
-       
+
         <div className="genreTags">
-          {current.genre?.map((g) => (
+          {current.genre.map((g) => (
             <span key={g} className="genreTag">
               {g}
             </span>
           ))}
         </div>
 
-        
         {current.cover && (
           <img
             src={current.cover}
@@ -53,10 +49,8 @@ function HeroSlider({ slides = [], loading = false }) {
           />
         )}
 
-       
         <div className="heroShadow" />
 
-       
         <div className="heroInfo">
           <div className="heroText" onClick={openGame}>
             <h2>{current.title}</h2>
@@ -70,44 +64,12 @@ function HeroSlider({ slides = [], loading = false }) {
           )}
         </div>
 
-       
         {slides.length > 1 && (
           <>
-            <button className="prevBtn" onClick={prevSlide}>
-              ❮
-            </button>
-            <button className="nextBtn" onClick={nextSlide}>
-              ❯
-            </button>
+            <button className="prevBtn" onClick={prevSlide}>❮</button>
+            <button className="nextBtn" onClick={nextSlide}>❯</button>
           </>
         )}
-      </div>
-    </div>
-  );
-}
-
-
-
-function HeroSliderSkeleton() {
-  return (
-    <div className="heroSlider skeleton-hero">
-      <div className="heroSkeletonImg" />
-
-      <div className="heroSkeletonTags">
-        <span />
-        <span />
-        <span />
-      </div>
-
-      <div className="heroShadow" />
-
-      <div className="heroSkeletonInfo">
-        <div className="heroSkeletonText">
-          <div className="heroSkeletonTitle" />
-          <div className="heroSkeletonDesc" />
-        </div>
-
-        <div className="heroSkeletonBtn" />
       </div>
     </div>
   );

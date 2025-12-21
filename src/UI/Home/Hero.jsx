@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Hero.css";
-import Search from './Search';
+import Search from "./Search";
 import HeroSlider from "./HeroSlider";
 import { fetchFeaturedGames } from "../../api/games";
 
@@ -13,26 +13,32 @@ function Hero() {
       .then((res) => {
         if (!res.data || !Array.isArray(res.data)) return;
 
-        const formatted = res.data.map(game => ({
-          id: game.id || "",
-          title: game.name || "Untitled Game",
-          text: game.description || "",
-          img: game.img || "",
-          cover:game.cover || "",
-          genre: Array.isArray(game.genres) ? game.genres.map(g => g.name) : [],
-          price: game.price != null ? `$${game.price}` : "N/A",
+        const formatted = res.data.map((game) => ({
+          id: game.id,
+          title: game.name,
+          text: game.description,
+          cover: game.cover,
+          genre: game.genres?.map((g) => g.name) || [],
+          price: game.price != null ? `$${game.price}` : null,
         }));
 
         setSlides(formatted);
       })
-      .catch((err) => {
-        console.error("Error fetching featured games:", err);
-        setSlides([]);
-      })
+      .catch(() => setSlides([]))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return (
+  return (
+    <div className="hero">
+      {loading ? <HeroSliderSkeleton /> : <HeroSlider slides={slides} />}
+      <Search />
+    </div>
+  );
+}
+
+/* ===== Slider Skeleton Component ===== */
+function HeroSliderSkeleton() {
+  return (
     <div className="heroSlider skeleton-hero">
       <div className="heroSkeletonImg" />
 
@@ -52,13 +58,6 @@ function Hero() {
 
         <div className="heroSkeletonBtn" />
       </div>
-    </div>
-  );
-
-  return (
-    <div className='hero'>
-      <HeroSlider slides={slides} />
-      <Search />
     </div>
   );
 }

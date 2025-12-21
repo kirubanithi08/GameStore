@@ -1,16 +1,91 @@
 
-.hero{
-    margin: 85px 0 0 200px;
-    display: flex;      
-    gap: 10px;      
+.hero {
+  margin: 85px 0 0 200px;
+  display: flex;
+  gap: 10px;
+}
+
+
+.skeleton-hero {
+  position: relative;
+  width: 80%;
+  height: 430px;
+  border-radius: 12px;
+  background: #2a2a2a;
+  overflow: hidden;
+  animation: pulse 1.5s infinite;
+}
+
+.heroSkeletonImg {
+  width: 100%;
+  height: 100%;
+  background: #333;
+}
+
+
+.heroSkeletonTags {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.heroSkeletonTags span {
+  width: 60px;
+  height: 22px;
+  border-radius: 6px;
+  background: #3a3a3a;
+}
+
+
+.heroSkeletonInfo {
+  position: absolute;
+  bottom: 35px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.heroSkeletonTitle {
+  width: 260px;
+  height: 28px;
+  background: #3a3a3a;
+  border-radius: 6px;
+}
+
+.heroSkeletonDesc {
+  width: 400px;
+  height: 18px;
+  margin-top: 10px;
+  background: #3a3a3a;
+  border-radius: 6px;
+}
+
+.heroSkeletonBtn {
+  margin-left: auto;
+  width: 160px;
+  height: 42px;
+  background: #3a3a3a;
+  border-radius: 6px;
+}
+
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
 }
 
 
 @media (max-width: 900px) {
-    .hero{
-         margin: 85px 0 0 20px;
-          display: inline-block; 
-    }
+  .hero {
+    margin: 85px 0 0 20px;
+    display: block;
+  }
+
+  .heroSkeletonDesc {
+    display: none;
+  }
 }
-
-
