@@ -36,7 +36,7 @@ function Hero() {
   );
 }
 
-/* ===== Slider Skeleton Component ===== */
+
 function HeroSliderSkeleton() {
   return (
     <div className="heroSlider skeleton-hero">
