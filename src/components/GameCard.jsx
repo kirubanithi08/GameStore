@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import "./GameCard.css";
+import placeholder from "../assets/placeholder.png";
 
 
-const FALLBACK_IMG = "../assets/placeholder.png";
+const FALLBACK_IMG = placeholder;
 
 export default function GameCard({ game }) {
   if (!game) return null;
