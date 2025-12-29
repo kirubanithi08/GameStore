@@ -1,3 +1,6 @@
+I DEPLOYED MY BACKEND IN RENDER FREE PLAN SO IT TAKES 1 OR 2 MINUTES TO WAKE THE SERVER
+
+
 🎮 GameStore – React Frontend
 
 A modern Game Store frontend application built with React.
