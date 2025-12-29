@@ -11,7 +11,7 @@ function CartComponent() {
       try {
         const res = await fetchCart();
 
-        // Handle different backend shapes safely
+       
         const items =
           res?.data?.content ??
           res?.data ??
