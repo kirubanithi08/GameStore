@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./GameCard.css";
-import placeholder from "../assets/placeholder.png";
+import placeholder from "..//assets/placeholder.jpg";
 
 
 const FALLBACK_IMG = placeholder;
@@ -23,7 +23,7 @@ export default function GameCard({ game }) {
       className="modernGameCard"
       aria-label={`View details for ${title}`}
     >
-      {/* Wishlist Badge */}
+     
       {wishlisted && <div className="wishlistBadge">❤️</div>}
 
       <div className="mgc-img">
@@ -48,7 +48,7 @@ export default function GameCard({ game }) {
           ))}
         </div>
 
-        {/* Styled as button, but semantically a div/span */}
+       
         <div className="mgc-buyBtn">
           Buy — {price}
         </div>

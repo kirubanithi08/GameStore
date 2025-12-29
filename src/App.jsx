@@ -10,22 +10,25 @@ import Dashboard from "./Routes/Dashboard";
 import GameDetails from "./Pages/GameDetails";
 import Cart from "./Routes/Cart"
 import PaymentSuccess from "./Pages/PaymentSuccess";
+import WelcomePopup from "./Layout/WelcomePopup";
 
-// Auth Protection
 import PrivateRoute from "./Router/PrivateRoute";
 
 function App() {
   return (
     <div className="app">
+
+<WelcomePopup/>
+
       <SideBar />
 
       <Routes>
-        {/* Public routes */}
+       
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
         <Route path="/game/:id" element={<GameDetails />} />
 
-        {/* User-only routes */}
+       
         <Route
           path="/buys"
           element={
@@ -53,7 +56,7 @@ function App() {
           }
         />
 
-        {/* Admin-only */}
+       
         <Route
           path="/dashboard"
           element={
@@ -63,7 +66,7 @@ function App() {
           }
         />
 
-{/* <Route path="/checkout/:id" element={<Checkout />} /> */}
+
 <Route path="/payment-success" element={<PaymentSuccess />} />
 
 
