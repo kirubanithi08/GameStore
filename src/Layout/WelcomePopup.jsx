@@ -24,7 +24,7 @@ export default function WelcomePopup() {
       <div className="popup">
         <h2>👋 Welcome!</h2>
         <h1>I use Render deploy free server so it takes 1 to 2 minutes to wake the server, so 
-          refresh.
+          refresh if website didn't reach the server.
         </h1>
         <br />
         <p>

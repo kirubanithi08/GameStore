@@ -9,7 +9,7 @@
 }
 
 .popup {
-  background: #0f172a;
+  background: #181818;
   color: #f8fafc;
   padding: 24px;
   border-radius: 12px;
@@ -29,8 +29,8 @@
 }
 
 .popup button {
-  background: #22c55e;
-  color: #052e16;
+  background: #1e88e5;
+  color: #fff;
   border: none;
   padding: 10px 18px;
   font-size: 15px;
@@ -40,5 +40,5 @@
 }
 
 .popup button:hover {
-  background: #16a34a;
+  background: #1e88e5;
 }
