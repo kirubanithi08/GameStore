@@ -19,7 +19,7 @@ export default function WelcomePopup() {
       <div className="popup">
         <h2>👋 Welcome!</h2>
         <h1>
-          Our free Render server can take 1–2 minutes to wake up. If the website
+          My free Render server can take 1–2 minutes to wake up. If the website
           seems slow, please refresh the page.
         </h1>
         <br />
