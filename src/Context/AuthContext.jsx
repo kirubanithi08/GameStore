@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { fetchMe } from "../api/auth";
+import { fetchMe } from "../services/auth";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,13 +19,13 @@ export function AuthProvider({ children }) {
     }
 
     try {
-      
+
 
       const { data } = await fetchMe();
-setUser({
-  ...data,
-  role: data.role?.toUpperCase()
-});
+      setUser({
+        ...data,
+        role: data.role?.toUpperCase()
+      });
 
     } catch {
       localStorage.removeItem("accessToken");

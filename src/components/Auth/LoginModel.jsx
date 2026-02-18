@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "./Model";
-import { loginUser } from "../../api/auth";
-import { useAuth } from "../../Context/AuthContext";
+import { loginUser } from "../../services/auth";
+import { useAuth } from "../../context/AuthContext";
 import "../Auth/AuthModel.css";
 
 export default function LoginModal({ onClose }) {
@@ -16,9 +16,9 @@ export default function LoginModal({ onClose }) {
       const { data } = await loginUser(form);
 
       login(data.accessToken, {
-  username: data.username,
-  role: data.role?.toUpperCase()      
-});
+        username: data.username,
+        role: data.role?.toUpperCase()
+      });
 
 
       onClose();

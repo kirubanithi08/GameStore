@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { registerUser, loginUser } from "../../api/auth";
+import { registerUser, loginUser } from "../../services/auth";
 import Modal from "./Model";
-import { useAuth } from "../../Context/AuthContext"; 
+import { useAuth } from "../../context/AuthContext";
 import "./AuthModel.css";
 
 export default function RegisterModal({ onClose }) {
-  const { login } = useAuth();  
+  const { login } = useAuth();
 
   const [form, setForm] = useState({ username: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
@@ -14,19 +14,19 @@ export default function RegisterModal({ onClose }) {
     setStatus({ loading: true, error: "", success: "" });
 
     try {
-     
+
       await registerUser(form);
 
-     
+
       const { data } = await loginUser(form);
 
-      
+
       login(data.accessToken, {
         username: data.username,
         role: data.role,
       });
 
-      onClose(); 
+      onClose();
 
     } catch (err) {
       setStatus({
