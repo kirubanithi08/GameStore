@@ -27,7 +27,7 @@ export default function Trending() {
 
   return (
     <GameSection
-      title="New Releases"
+      title="Trending"
       games={games}
       loading={loading}
       showArrow={true}
