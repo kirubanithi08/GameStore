@@ -1,13 +1,13 @@
 import React from 'react'
-import {fetchWishlist} from "../api/games"
+import { fetchWishlist } from "../services/games"
 import GamePageComponent from "../components/GamePageComponent"
 function WishList() {
   return (
     <>
-    <GamePageComponent 
-        sectionName="WishList" 
-         fetchGames={fetchWishlist}
-        />
+      <GamePageComponent
+        sectionName="WishList"
+        fetchGames={fetchWishlist}
+      />
     </>
   )
 }

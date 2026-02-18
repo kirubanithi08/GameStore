@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import api from "../../api/axios";
+import api from "../../services/axios";
 import "./AdminDashboard.css";
 
 export default function GameForm({ onClose, game }) {
@@ -23,7 +23,7 @@ export default function GameForm({ onClose, game }) {
       .then(res => setGenres(res.data))
       .catch(() => setError("Failed to load genres"));
 
-    
+
     if (game) {
       setForm({
         name: game.name || "",
@@ -68,11 +68,11 @@ export default function GameForm({ onClose, game }) {
     setError("");
     try {
       if (game) {
-       
+
         await api.put(`/games/${game.id}`, { ...form, price: Number(form.price) });
         showToast("Game updated successfully!");
       } else {
-        
+
         await api.post("/games", { ...form, price: Number(form.price) });
         showToast("Game created successfully!");
         setForm({ name: "", img: "", cover: "", description: "", price: "", featured: false, genres: [] });

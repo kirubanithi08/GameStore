@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios";
-import { fetchMe } from "../api/auth";
-import GameForm from "../UI/Dashboard/GameForm";
+import api from "../services/axios";
+import { fetchMe } from "../services/auth";
+import GameForm from "../components/Dashboard/GameForm";
 import CheckoutModal from "./CheckoutModel";
-import LoginModal from "../UI/Auth/LoginModel";
+import LoginModal from "../components/Auth/LoginModel";
 import "./GameDetails.css";
 
 export default function GameDetails() {
@@ -31,13 +31,13 @@ export default function GameDetails() {
   const [inCart, setInCart] = useState(false);
   const [toast, setToast] = useState(null);
 
-  
+
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
 
-  
+
   useEffect(() => {
     const token =
       localStorage.getItem("jwt") ||
@@ -53,7 +53,7 @@ export default function GameDetails() {
 
   const isAdmin = user?.role === "ROLE_ADMIN";
 
-  
+
   useEffect(() => {
     async function loadGame() {
       try {
@@ -71,23 +71,23 @@ export default function GameDetails() {
     loadGame();
   }, [id]);
 
- 
+
   useEffect(() => {
-  if (!user || !game) return;
+    if (!user || !game) return;
 
-  api.get(`/favorites/exists/${game.id}`)
-    .then((res) => setWishlisted(res.data === true));
+    api.get(`/favorites/exists/${game.id}`)
+      .then((res) => setWishlisted(res.data === true));
 
-  api.get(`/purchase/exists/${game.id}`)
-    .then((res) => setPurchased(res.data === true));
+    api.get(`/purchase/exists/${game.id}`)
+      .then((res) => setPurchased(res.data === true));
 
-  api.get(`/cart/exists/${game.id}`)
-    .then((res) => setInCart(res.data === true))
-    .catch(() => {});
-}, [user, game]);
+    api.get(`/cart/exists/${game.id}`)
+      .then((res) => setInCart(res.data === true))
+      .catch(() => { });
+  }, [user, game]);
 
 
- 
+
   const toggleWishlist = async () => {
     if (!user) return setShowLogin(true);
 
@@ -112,27 +112,27 @@ export default function GameDetails() {
 
 
 
-const handleAddToCart = async () => {
-  if (!user) return setShowLogin(true);
-  if (purchased) return;
+  const handleAddToCart = async () => {
+    if (!user) return setShowLogin(true);
+    if (purchased) return;
 
-  setCartLoading(true);
-  try {
-    if (inCart) {
-      await api.delete(`/cart/${game.id}`);
-      setInCart(false);
-      showToast("Removed from cart");
-    } else {
-      await api.post(`/cart/${game.id}`);
-      setInCart(true);
-      showToast("Added to cart");
+    setCartLoading(true);
+    try {
+      if (inCart) {
+        await api.delete(`/cart/${game.id}`);
+        setInCart(false);
+        showToast("Removed from cart");
+      } else {
+        await api.post(`/cart/${game.id}`);
+        setInCart(true);
+        showToast("Added to cart");
+      }
+    } catch {
+      showToast("Cart action failed", "error");
+    } finally {
+      setCartLoading(false);
     }
-  } catch {
-    showToast("Cart action failed", "error");
-  } finally {
-    setCartLoading(false);
-  }
-};
+  };
 
 
 
@@ -151,20 +151,20 @@ const handleAddToCart = async () => {
     }
   };
 
-  
+
   if (loading) return <SkeletonGameDetails />;
   if (!game) return <div className="notFound">Game Not Found</div>;
 
   return (
     <div className="gameDetailsPage">
-     
+
       {toast && (
         <div className={`toast ${toast.type}`}>
           {toast.message}
         </div>
       )}
 
-     
+
       <div
         className="gameBanner"
         style={{ backgroundImage: `url(${game.cover})` }}
@@ -172,7 +172,7 @@ const handleAddToCart = async () => {
         <div className="bannerFade"></div>
       </div>
 
-      
+
       <div className="gameMainContent">
         <div className="coverCard">
           <img src={game.img} alt={game.name} />
@@ -203,14 +203,14 @@ const handleAddToCart = async () => {
 
 
             <button
-  className={`cartBtn ${inCart ? "active" : ""}`}
-  onClick={handleAddToCart}
-  disabled={cartLoading || purchased}
-  title={purchased ? "Already owned" : inCart ? "Remove from cart" : "Add to cart"}
->
- 
-   🛒
-</button>
+              className={`cartBtn ${inCart ? "active" : ""}`}
+              onClick={handleAddToCart}
+              disabled={cartLoading || purchased}
+              title={purchased ? "Already owned" : inCart ? "Remove from cart" : "Add to cart"}
+            >
+
+              🛒
+            </button>
 
 
             <button

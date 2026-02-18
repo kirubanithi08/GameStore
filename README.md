@@ -1,89 +1,66 @@
-I DEPLOYED MY BACKEND IN RENDER FREE PLAN SO IT TAKES 1 OR 2 MINUTES TO WAKE THE SERVER
+# GameStore
 
+GameStore is a modern web application designed for browsing and purchasing video games. The project features a responsive layout, personal wishlists, a shopping cart, and an administrative dashboard for game management.
 
-🎮 GameStore – React Frontend
+## Project Structure
 
-A modern Game Store frontend application built with React.
-The application supports role-based authentication and authorization using JWT, allowing different access levels for users (e.g., Admin and User).
+The project follows a modular and scalable directory structure:
 
-🚀 Features
+- **src/components**: Reusable UI components co-located with their styles.
+- **src/context**: React context providers for global state management.
+- **src/hooks**: Custom React hooks for shared logic.
+- **src/layouts**: Layout-level components such as the Sidebar and Welcome Popups.
+- **src/pages**: Page-level components corresponding to application routes.
+- **src/services**: API client configurations and data fetching logic.
+- **src/styles**: Global styles and CSS utilities.
+- **src/routes**: Route guarding and private route configurations.
+- **src/assets**: Static assets including images and icons.
 
-🕹️ Browse games
+## Features
 
-🗂️ Filter games by genre
+- **Game Discovery**: Explore a wide range of games with filtering and search capabilities.
+- **User Authentication**: Secure login and registration for personal accounts.
+- **Wishlist**: Save favorite games for future reference.
+- **Shopping Cart**: Manage games before proceeding to checkout.
+- **Admin Dashboard**: Specialized tools for administrators to manage the game catalog and user database.
+- **Responsive Design**: Optimized for various screen sizes from mobile to desktop.
 
-🔍 Search games using search bar
+## Technical Stack
 
-❤️ Wishlist management
+- **Frontend**: React, React Router
+- **Styling**: Vanilla CSS
+- **State Management**: React Context API
+- **API Communication**: Axios
+- **Build Tool**: Vite
 
-🛒 Cart management
+## Getting Started
 
-🔐 JWT-based authentication
+### Prerequisites
 
-🧑‍💼 Role-based access control (Admin / User)
+- Node.js (Latest LTS recommended)
+- npm or yarn
 
-🚫 Protected routes based on user roles
+### Installation
 
-📦 Axios for API communication
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
 
-⚡ Responsive UI
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-🛠️ Tech Stack
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Frontend: React
+## Development and Deployment
 
-Routing: React Router
+The application is configured to communicate with a Render-hosted backend. Please note that the server may experience short delays during initial wake-up.
 
-State Management: React Hooks / Context API
+## License
 
-HTTP Client: Axios
-
-Authentication: JWT (JSON Web Token)
-
-Authorization: Role-Based Access Control (RBAC)
-
-Styling: CSS / Tailwind / Bootstrap (update if applicable)
-
-🧑‍💼 Role-Based Access Control (RBAC)
-
-The application supports different user roles:
-
-👤 User
-
-Browse games
-
-Search and filter games
-
-Add games to wishlist
-
-Add games to cart
-
-🛠️ Admin
-
-Access admin-only routes
-
-Manage games (add / update / delete)
-
-Manage genres (if applicable)
-
-User role is extracted from the JWT payload and validated on protected routes.
-
-🔐 Authentication & Authorization Flow
-
-User logs in or registers
-
-Backend returns a JWT token containing:
-
-User ID
-
-Role (e.g., ADMIN, USER)
-
-Token is stored in localStorage
-
-Axios attaches token to every request
-
-React protected routes validate:
-
-Authentication status
-
-User role
+This project is licensed under the MIT License.

@@ -1,10 +1,7 @@
-/* ===============================
-   OVERLAY
-================================ */
 .checkoutOverlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(255,0,0,0.15), rgba(0,0,0,0.9));
+  background: radial-gradient(circle at top, rgba(255, 0, 0, 0.15), rgba(0, 0, 0, 0.9));
   backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
@@ -12,9 +9,7 @@
   z-index: 2000;
 }
 
-/* ===============================
-   MODAL
-================================ */
+
 .checkoutModal {
   width: 420px;
   background: linear-gradient(180deg, #141414, #0c0c0c);
@@ -23,14 +18,12 @@
   color: #fff;
   position: relative;
   box-shadow:
-    0 40px 80px rgba(0,0,0,0.8),
-    inset 0 0 0 1px rgba(255,255,255,0.05);
+    0 40px 80px rgba(0, 0, 0, 0.8),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   animation: popIn 0.3s ease;
 }
 
-/* ===============================
-   CLOSE BUTTON
-================================ */
+
 .closeBtn {
   position: absolute;
   top: 14px;
@@ -50,23 +43,19 @@
   color: #fff;
 }
 
-/* ===============================
-   TITLE
-================================ */
+
 .checkoutTitle {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-/* ===============================
-   GAME SUMMARY
-================================ */
+
 .gameSummary {
   display: flex;
   gap: 16px;
   padding: 14px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
   margin-bottom: 22px;
 }
@@ -87,9 +76,7 @@
   color: #ff4d4d;
 }
 
-/* ===============================
-   PAYMENT FORM
-================================ */
+
 .paymentForm label {
   display: block;
   font-size: 12px;
@@ -114,9 +101,7 @@
   gap: 12px;
 }
 
-/* ===============================
-   PAY BUTTON
-================================ */
+
 .payBtn {
   width: 100%;
   padding: 16px;
@@ -133,7 +118,7 @@
 
 .payBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px rgba(255,0,0,0.4);
+  box-shadow: 0 12px 30px rgba(255, 0, 0, 0.4);
 }
 
 .payBtn:disabled {
@@ -141,18 +126,14 @@
   cursor: not-allowed;
 }
 
-/* ===============================
-   ERROR
-================================ */
+
 .errorText {
   color: #ff4d4d;
   font-size: 13px;
   margin-bottom: 10px;
 }
 
-/* ===============================
-   DISCLAIMER
-================================ */
+
 .disclaimer {
   margin-top: 16px;
   font-size: 12px;
@@ -160,23 +141,20 @@
   text-align: center;
 }
 
-/* ===============================
-   ANIMATION
-================================ */
+
 @keyframes popIn {
   from {
     opacity: 0;
     transform: scale(0.9) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
 
-/* ===============================
-   MOBILE
-================================ */
+
 @media (max-width: 480px) {
   .checkoutModal {
     width: 90%;

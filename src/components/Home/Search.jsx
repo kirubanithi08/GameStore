@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchGames } from "../../api/games";
+import { searchGames } from "../../services/games";
 import "./Search.css";
 
 export default function Search() {
@@ -9,7 +9,7 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  
+
   useEffect(() => {
     if (query.trim() === "") {
       setResults([]);
@@ -43,8 +43,8 @@ export default function Search() {
 
   const handleNavigate = (id) => {
     navigate(`/game/${id}`);
-    setQuery("");      
-    setResults([]);    
+    setQuery("");
+    setResults([]);
   };
 
   return (
@@ -57,7 +57,7 @@ export default function Search() {
         onChange={(e) => setQuery(e.target.value)}
       />
 
-      
+
       {query && results.length > 0 && (
         <div className="searchDropdown">
           {results.map((game) => (
@@ -76,7 +76,7 @@ export default function Search() {
         </div>
       )}
 
-      
+
       {query && !loading && results.length === 0 && (
         <div className="searchDropdown noResults">
           No games found

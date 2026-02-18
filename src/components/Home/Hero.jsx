@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Hero.css";
 import Search from "./Search";
 import HeroSlider from "./HeroSlider";
-import { fetchFeaturedGames } from "../../api/games";
+import { fetchFeaturedGames } from "../../services/games";
 
 function Hero() {
   const [slides, setSlides] = useState([]);

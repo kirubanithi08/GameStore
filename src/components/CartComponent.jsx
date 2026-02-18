@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchCart } from "../api/games";
+import { fetchCart } from "../services/games";
 import "./Cart.css";
 
 function CartComponent() {
@@ -11,7 +11,7 @@ function CartComponent() {
       try {
         const res = await fetchCart();
 
-       
+
         const items =
           res?.data?.content ??
           res?.data ??

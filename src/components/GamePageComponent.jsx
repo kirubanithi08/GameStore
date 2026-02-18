@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { searchGames } from "../api/games";
+import { searchGames } from "../services/games";
 
 import GameCard from "./GameCard";
 import SearchBar from "./SearchBar";
@@ -20,7 +20,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
 
   const [genre, setGenre] = useState("ALL");
 
-  
+
 
   const formatGame = (item) => {
     const g = item.game || item;
@@ -39,7 +39,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     };
   };
 
-  
+
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -64,7 +64,7 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     }
   };
 
-  
+
 
   const handleSearch = async (text) => {
     setSearchQuery(text);
@@ -87,12 +87,12 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     }
   };
 
-  
+
   const listToShow = (searchQuery ? searchResults : games).filter(
     (g) => genre === "ALL" || g.genre.includes(genre)
   );
 
-  
+
 
   return (
     <div className="gamesPage">
@@ -117,8 +117,8 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
       <div className="gamesGrid">
         {loading
           ? Array.from({ length: PAGE_SIZE }).map((_, i) => (
-              <GameCardSkeleton key={i} />
-            ))
+            <GameCardSkeleton key={i} />
+          ))
           : listToShow.map((g) => <GameCard key={g.id} game={g} />)}
       </div>
 

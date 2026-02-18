@@ -1,15 +1,15 @@
 import React from 'react'
-import {fetchGames} from "../api/games"
+import { fetchGames } from "../services/games"
 import GamePageComponent from "../components/GamePageComponent"
 function Games() {
   return (
     <>
-    
-<GamePageComponent 
-    sectionName="All Games" 
-    fetchGames={fetchGames}
-   
-    />
+
+      <GamePageComponent
+        sectionName="All Games"
+        fetchGames={fetchGames}
+
+      />
     </>
   )
 }

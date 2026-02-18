@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import GameForm from "./GameForm";
-import api from "../../api/axios";
+import api from "../../services/axios";
 import "./AdminDashboard.css";
 
 
@@ -12,20 +12,20 @@ export default function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
- 
+
   useEffect(() => {
     setLoadingUsers(true);
     api
       .get("/user")
       .then((res) => {
         console.log("Users API Response:", res.data);
-        setUsers(res.data.content || []); 
+        setUsers(res.data.content || []);
       })
       .catch(() => setError("Failed to load users"))
       .finally(() => setLoadingUsers(false));
   }, []);
 
-  
+
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     }
   };
 
- 
+
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -45,17 +45,17 @@ export default function AdminDashboard() {
 
   return (
     <div className="dashboard-container">
-     
+
       <div className="upperBox">
         <button className="create-btn" onClick={() => setShowForm(true)}>
           + Create Game
         </button>
       </div>
 
-      
+
       {showForm && <GameForm onClose={() => setShowForm(false)} />}
 
-      
+
       <div className="user-list">
         <h2>Users</h2>
 
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
               </tbody>
             </table>
 
-            
+
             <div className="pagination">
               <button
                 disabled={currentPage === 1}

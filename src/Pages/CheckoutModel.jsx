@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/axios";
+import api from "../services/axios";
 import "./Checkout.css";
 
 export default function CheckoutModal({ gameId, onClose }) {
@@ -19,10 +19,10 @@ export default function CheckoutModal({ gameId, onClose }) {
     setError(null);
 
     try {
-      
+
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      
+
       await api.post(`/purchases/${gameId}`);
 
       alert("Payment successful! Game added to your library 🎮");
