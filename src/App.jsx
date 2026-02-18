@@ -1,34 +1,33 @@
 import { Route, Routes } from "react-router-dom";
-import SideBar from "./Layout/SideBar";
+import SideBar from "./layouts/SideBar";
 
-// Pages
-import Home from "./Routes/Home";
-import Games from "./Routes/Games";
-import Buys from "./Routes/Buys";
-import WishList from "./Routes/WishList";
-import Dashboard from "./Routes/Dashboard";
-import GameDetails from "./Pages/GameDetails";
-import Cart from "./Routes/Cart"
-import PaymentSuccess from "./Pages/PaymentSuccess";
-import WelcomePopup from "./Layout/WelcomePopup";
+import Home from "./pages/Home";
+import Games from "./pages/Games";
+import Buys from "./pages/Buys";
+import WishList from "./pages/WishList";
+import Dashboard from "./pages/Dashboard";
+import GameDetails from "./pages/GameDetails";
+import Cart from "./pages/Cart"
+import PaymentSuccess from "./pages/PaymentSuccess";
+import WelcomePopup from "./layouts/WelcomePopup";
 
-import PrivateRoute from "./Router/PrivateRoute";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
     <div className="app">
 
-<WelcomePopup/>
+      <WelcomePopup />
 
       <SideBar />
 
       <Routes>
-       
+
         <Route path="/" element={<Home />} />
         <Route path="/games" element={<Games />} />
         <Route path="/game/:id" element={<GameDetails />} />
 
-       
+
         <Route
           path="/buys"
           element={
@@ -56,7 +55,7 @@ function App() {
           }
         />
 
-       
+
         <Route
           path="/dashboard"
           element={
@@ -67,7 +66,7 @@ function App() {
         />
 
 
-<Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
 
 
       </Routes>
