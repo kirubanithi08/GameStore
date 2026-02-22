@@ -10,11 +10,12 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <div className="searchBar">
+    <div className="searchBarContainer">
+     
       <input
         type="text"
         value={query}
-        placeholder="🔍 Search games..."
+        placeholder="Search for amazing games..."
         className="searchInput"
         onChange={handleChange}
       />
