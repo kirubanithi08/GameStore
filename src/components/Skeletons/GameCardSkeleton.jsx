@@ -10,10 +10,13 @@ export default function GameCardSkeleton() {
 
         <div className="skeleton-tags">
           <div className="skeleton-genre" />
-          <div className="skeleton-genre small" />
+          <div className="skeleton-genre" />
         </div>
 
-        <div className="skeleton-btn" />
+        <div className="skeleton-footer">
+          <div className="skeleton-price" />
+          <div className="skeleton-btn" />
+        </div>
       </div>
     </div>
   );
