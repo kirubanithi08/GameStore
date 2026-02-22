@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../services/axios";
-import { fetchMe } from "../services/auth";
+import * as authService from "../services/auth";
+import * as gameService from "../services/games";
+import { useToast } from "../context/ToastContext";
 import GameForm from "../components/Dashboard/GameForm";
 import CheckoutModal from "./CheckoutModel";
 import LoginModal from "../components/Auth/LoginModel";
@@ -10,80 +11,72 @@ import "./GameDetails.css";
 export default function GameDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [user, setUser] = useState(null);
-
   const [wishlisted, setWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
-
   const [purchased, setPurchased] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
-
   const [showForm, setShowForm] = useState(false);
   const [adminLoading, setAdminLoading] = useState(false);
-
   const [showLogin, setShowLogin] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
-
   const [inCart, setInCart] = useState(false);
-  const [toast, setToast] = useState(null);
 
-
-  const showToast = (message, type = "success") => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
-
-
-  useEffect(() => {
-    const token =
-      localStorage.getItem("jwt") ||
-      localStorage.getItem("token") ||
-      localStorage.getItem("accessToken");
-
+  const loadUserData = useCallback(async () => {
+    const token = localStorage.getItem("accessToken");
     if (!token) return;
 
-    fetchMe()
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null));
+    try {
+      const userData = await authService.fetchMe();
+      setUser(userData);
+    } catch (err) {
+      setUser(null);
+    }
   }, []);
 
-  const isAdmin = user?.role === "ROLE_ADMIN";
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
+  const isAdmin = user?.role === "Admin";
 
   useEffect(() => {
-    async function loadGame() {
+    const loadGame = async () => {
       try {
-        const res = await fetch(
-          `https://game-store-6uwt.onrender.com/api/games/${id}`
-        );
-        const data = await res.json();
+        const data = await gameService.fetchGameById(id);
         setGame(data);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load game:", err);
       } finally {
         setLoading(false);
       }
-    }
+    };
     loadGame();
   }, [id]);
 
-
   useEffect(() => {
-    if (!user || !game) return;
+    const checkStatus = async () => {
+      if (!user || !game) return;
 
-    api.get(`/favorites/exists/${game.id}`)
-      .then((res) => setWishlisted(res.data === true));
+      try {
+        const [isWishlisted, isPurchased, isInCart] = await Promise.all([
+          gameService.checkWishlistExists(game.id),
+          gameService.checkPurchaseExists(game.id),
+          gameService.checkCartExists(game.id).catch(() => false)
+        ]);
 
-    api.get(`/purchase/exists/${game.id}`)
-      .then((res) => setPurchased(res.data === true));
-
-    api.get(`/cart/exists/${game.id}`)
-      .then((res) => setInCart(res.data === true))
-      .catch(() => { });
+        setWishlisted(isWishlisted === true);
+        setPurchased(isPurchased === true);
+        setInCart(isInCart === true);
+      } catch (err) {
+        console.error("Status check failed:", err);
+      }
+    };
+    checkStatus();
   }, [user, game]);
 
 
@@ -94,21 +87,20 @@ export default function GameDetails() {
     setWishlistLoading(true);
     try {
       if (wishlisted) {
-        await api.delete(`/favorites/${game.id}`);
+        await gameService.removeFromWishlist(game.id);
         setWishlisted(false);
-        showToast("Removed from wishlist");
+        addToast("Removed from wishlist");
       } else {
-        await api.post(`/favorites/${game.id}`);
+        await gameService.addToWishlist(game.id);
         setWishlisted(true);
-        showToast("Added to wishlist");
+        addToast("Added to wishlist");
       }
     } catch {
-      showToast("Something went wrong", "error");
+      addToast("Something went wrong", "error");
     } finally {
       setWishlistLoading(false);
     }
   };
-
 
 
 
@@ -119,16 +111,16 @@ export default function GameDetails() {
     setCartLoading(true);
     try {
       if (inCart) {
-        await api.delete(`/cart/${game.id}`);
+        await gameService.removeFromCart(game.id);
         setInCart(false);
-        showToast("Removed from cart");
+        addToast("Removed from cart");
       } else {
-        await api.post(`/cart/${game.id}`);
+        await gameService.addToCart(game.id);
         setInCart(true);
-        showToast("Added to cart");
+        addToast("Added to cart");
       }
     } catch {
-      showToast("Cart action failed", "error");
+      addToast("Cart action failed", "error");
     } finally {
       setCartLoading(false);
     }
@@ -141,11 +133,11 @@ export default function GameDetails() {
 
     setAdminLoading(true);
     try {
-      await api.delete(`/games/${game.id}`);
-      showToast("Game deleted");
-      navigate("/admin/dashboard");
+      await gameService.deleteGame(game.id);
+      addToast("Game deleted");
+      navigate("/games");
     } catch {
-      showToast("Delete failed", "error");
+      addToast("Delete failed", "error");
     } finally {
       setAdminLoading(false);
     }
@@ -157,13 +149,6 @@ export default function GameDetails() {
 
   return (
     <div className="gameDetailsPage">
-
-      {toast && (
-        <div className={`toast ${toast.type}`}>
-          {toast.message}
-        </div>
-      )}
-
 
       <div
         className="gameBanner"
@@ -208,8 +193,7 @@ export default function GameDetails() {
               disabled={cartLoading || purchased}
               title={purchased ? "Already owned" : inCart ? "Remove from cart" : "Add to cart"}
             >
-
-              🛒
+              {inCart ? "🛒 In Cart" : "🛒 Add to Cart"}
             </button>
 
 
@@ -219,7 +203,7 @@ export default function GameDetails() {
               disabled={wishlistLoading}
               title="Wishlist"
             >
-              ♥
+              {wishlisted ? "❤️" : "🤍"}
             </button>
           </div>
 
@@ -254,6 +238,7 @@ export default function GameDetails() {
     </div>
   );
 }
+
 
 /*SKELETON */
 function SkeletonGameDetails() {

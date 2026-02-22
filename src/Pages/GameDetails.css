@@ -133,83 +133,60 @@ body {
 
 
 .cartBtn {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  font-size: 18px;
+  padding: 8px 16px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 198, 255, 0.4);
+  background: rgba(0, 198, 255, 0.05);
+  color: #00c6ff;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 0 1 auto;
 }
 
 .cartBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+  background: rgba(0, 198, 255, 0.15);
+  border-color: #00c6ff;
+  transform: translateY(-1px);
 }
 
 .cartBtn.active {
-  background: white;
-  color: black;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 
 .wishlistBtn {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  font-size: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 20px;
   color: #aaa;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .wishlistBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.1);
   color: #ff4d6d;
 }
 
 .wishlistBtn.active {
   color: #ff4d6d;
   background: rgba(255, 77, 109, 0.15);
-}
-
-.toast {
-  height: 50px;
-  width: 100px;
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  animation: slideUp 0.7s ease;
-}
-
-.toast.success {
-  background: #1f2937;
-  color: #fff;
-}
-
-.toast.error {
-  background: #7f1d1d;
-  color: #fff;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  border-color: rgba(255, 77, 109, 0.3);
 }
 
 
@@ -293,21 +270,29 @@ body {
 }
 
 
-@media screen and (max-width:900px) {
+@media screen and (max-width: 1024px) {
   .gameDetailsPage {
     padding-left: 0;
-    /* min-height: 100vh;
-  overflow-x: hidden; */
+  }
+
+  .gameMainContent {
+    margin-top: -100px;
+    padding: 0 20px;
+    justify-content: center;
   }
 
   .coverCard {
-    position: relative;
-    right: 6px;
+    width: 200px;
+    height: 300px;
+    margin-bottom: 20px;
   }
 
   .infoPanel {
-    position: relative;
-    right: 41px;
+    min-width: 100%;
+    padding: 20px;
   }
 
+  .title {
+    font-size: 32px;
+  }
 }

@@ -64,17 +64,67 @@
 
 @media (max-width: 750px) {
   .gamesPage {
-    margin-left: 20px;
-    padding: 20px;
+    margin-left: 0;
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+
+  .topControls {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
   }
 
   .searchInput {
-    width: 180px;
+    width: 100%;
   }
 
   .gamesGrid {
-    width: 100%;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
+}
+
+.auth-placeholder,
+.empty-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  margin-top: 20px;
+}
+
+.auth-placeholder p,
+.empty-placeholder p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+}
+
+.login-btn-placeholder {
+  padding: 12px 24px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.login-btn-placeholder:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.loader {
+  padding: 40px;
+  text-align: center;
+  color: #007bff;
+  font-weight: 600;
 }
