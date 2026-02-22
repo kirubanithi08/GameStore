@@ -6,18 +6,18 @@ import "../Auth/AuthModel.css";
 
 export default function LoginModal({ onClose }) {
   const { login } = useAuth();
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "" });
 
   const handleLogin = async () => {
     setStatus({ loading: true, error: "" });
 
     try {
-      const { data } = await loginUser(form);
+      const userData = await loginUser(form);
 
-      login(data.accessToken, {
-        username: data.username,
-        role: data.role?.toUpperCase()
+      login(userData.accessToken, {
+        username: userData.username,
+        role: userData.role
       });
 
 
@@ -35,14 +35,14 @@ export default function LoginModal({ onClose }) {
       <h2 className="modal-title">Login</h2>
 
       <div className="modal-group">
-        <label>Username</label>
+        <label>Email</label>
         <input
-          type="text"
-          value={form.username}
+          type="email"
+          value={form.email}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, username: e.target.value }))
+            setForm((prev) => ({ ...prev, email: e.target.value }))
           }
-          placeholder="Enter username"
+          placeholder="Enter email"
         />
       </div>
 

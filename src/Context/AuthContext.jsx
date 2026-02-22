@@ -19,12 +19,10 @@ export function AuthProvider({ children }) {
     }
 
     try {
-
-
-      const { data } = await fetchMe();
+      const userData = await fetchMe();
       setUser({
-        ...data,
-        role: data.role?.toUpperCase()
+        ...userData,
+        role: userData.role
       });
 
     } catch {

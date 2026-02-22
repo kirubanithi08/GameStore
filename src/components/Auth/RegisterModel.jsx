@@ -7,7 +7,7 @@ import "./AuthModel.css";
 export default function RegisterModal({ onClose }) {
   const { login } = useAuth();
 
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
 
   const handleRegister = async () => {
@@ -17,13 +17,11 @@ export default function RegisterModal({ onClose }) {
 
       await registerUser(form);
 
+      const userData = await loginUser({ username: form.username, password: form.password });
 
-      const { data } = await loginUser(form);
-
-
-      login(data.accessToken, {
-        username: data.username,
-        role: data.role,
+      login(userData.accessToken, {
+        username: userData.username,
+        role: userData.role,
       });
 
       onClose();
@@ -47,6 +45,15 @@ export default function RegisterModal({ onClose }) {
           type="text"
           value={form.username}
           onChange={(e) => setForm({ ...form, username: e.target.value })}
+        />
+      </div>
+
+      <div className="modal-group">
+        <label>Email</label>
+        <input
+          type="email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
       </div>
 
