@@ -42,32 +42,28 @@ export default function Sidebar() {
               </NavLink>
             </li>
 
-            {user && (
-              <>
-                <li>
-                  <NavLink to="/wishlist" className="nav-link" onClick={() => setIsOpen(false)}>
-                    <i className="fa-solid fa-heart"></i>
-                    Wishlist
-                  </NavLink>
-                </li>
+            <li>
+              <NavLink to="/wishlist" className="nav-link" onClick={() => setIsOpen(false)}>
+                <i className="fa-solid fa-heart"></i>
+                Wishlist
+              </NavLink>
+            </li>
 
-                <li>
-                  <NavLink to="/cart" className="nav-link" onClick={() => setIsOpen(false)}>
-                    <i className="fa-solid fa-cart-shopping"></i>
-                    Cart
-                  </NavLink>
-                </li>
+            <li>
+              <NavLink to="/cart" className="nav-link" onClick={() => setIsOpen(false)}>
+                <i className="fa-solid fa-cart-shopping"></i>
+                Cart
+              </NavLink>
+            </li>
 
-                <li>
-                  <NavLink to="/buys" className="nav-link" onClick={() => setIsOpen(false)}>
-                    <i className="fa-solid fa-bag-shopping"></i>
-                    Purchases
-                  </NavLink>
-                </li>
-              </>
-            )}
+            <li>
+              <NavLink to="/buys" className="nav-link" onClick={() => setIsOpen(false)}>
+                <i className="fa-solid fa-bag-shopping"></i>
+                Purchases
+              </NavLink>
+            </li>
 
-            {user?.role === "ROLE_ADMIN" && (
+            {user?.role === "Admin" && (
               <li>
                 <NavLink to="/dashboard" className="nav-link" onClick={() => setIsOpen(false)}>
                   <i className="fas fa-user-shield"></i>
