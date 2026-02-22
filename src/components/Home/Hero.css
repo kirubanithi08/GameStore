@@ -1,4 +1,3 @@
-
 .hero {
   margin: 85px 0 0 200px;
   display: flex;
@@ -19,7 +18,7 @@
 .heroSkeletonImg {
   width: 100%;
   height: 100%;
- 
+
   background: #333;
 }
 
@@ -74,16 +73,31 @@
 
 
 @keyframes pulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+  0% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.4;
+  }
 }
 
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .hero {
-    margin: 85px 0 0 20px;
-    display: block;
+    margin: 85px 16px 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .skeleton-hero {
+    width: 100%;
+    height: 300px;
   }
 
   .heroSkeletonDesc {

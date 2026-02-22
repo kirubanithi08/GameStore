@@ -9,11 +9,16 @@ function Hero() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchFeaturedGames()
-      .then((res) => {
-        if (!res.data || !Array.isArray(res.data)) return;
+    const loadFeatured = async () => {
+      try {
+        const data = await fetchFeaturedGames();
 
-        const formatted = res.data.map((game) => ({
+        if (!data || !Array.isArray(data)) {
+          setSlides([]);
+          return;
+        }
+
+        const formatted = data.map((game) => ({
           id: game.id,
           title: game.name,
           text: game.description,
@@ -23,9 +28,14 @@ function Hero() {
         }));
 
         setSlides(formatted);
-      })
-      .catch(() => setSlides([]))
-      .finally(() => setLoading(false));
+      } catch (err) {
+        console.error("Featured fetch error:", err);
+        setSlides([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFeatured();
   }, []);
 
   return (

@@ -6,6 +6,14 @@ function HeroSlider({ slides = [] }) {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   if (!slides.length) return null;
 
   const current = slides[index];
@@ -17,12 +25,6 @@ function HeroSlider({ slides = [] }) {
   const prevSlide = () => {
     setIndex((prev) => (prev - 1 + slides.length) % slides.length);
   };
-
-  useEffect(() => {
-    if (slides.length <= 1) return;
-    const timer = setInterval(nextSlide, 7000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
 
   const openGame = () => {
     if (current.id) navigate(`/game/${current.id}`);

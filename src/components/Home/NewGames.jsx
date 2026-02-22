@@ -7,24 +7,30 @@ export default function NewGames() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchNewGames(5)
-      .then((res) => {
-        const formatted = res.data.map((game) => ({
+    const loadNewGames = async () => {
+      try {
+        const data = await fetchNewGames(5);
+        if (!data || !Array.isArray(data)) {
+          setGames([]);
+          return;
+        }
+        const formatted = data.map((game) => ({
           id: game.id,
           title: game.name,
           img: game.img,
           description: game.description,
-          price: `$${game.price}`,
-          genre: game.genres.map((g) => g.name),
+          price: game.price ? `$${game.price}` : "Free",
+          genre: game.genres?.map((g) => g.name) || [],
         }));
-
         setGames(formatted);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Failed to fetch new games", err);
         setGames([]);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadNewGames();
   }, []);
 
   return (
