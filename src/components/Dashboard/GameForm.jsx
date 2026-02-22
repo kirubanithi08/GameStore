@@ -1,8 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import api from "../../services/axios";
+import React, { useEffect, useState } from "react";
+import api from "../../services/apiClient";
+import { fetchGenres } from "../../services/games";
+import { useToast } from "../../context/ToastContext";
 import "./AdminDashboard.css";
 
 export default function GameForm({ onClose, game }) {
+  const { addToast } = useToast();
   const [form, setForm] = useState({
     name: "",
     img: "",
@@ -15,14 +18,18 @@ export default function GameForm({ onClose, game }) {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const toastRef = useRef(null);
-  const toastTimerRef = useRef(null);
 
   useEffect(() => {
-    api.get("/genres")
-      .then(res => setGenres(res.data))
-      .catch(() => setError("Failed to load genres"));
+    const loadGenres = async () => {
+      try {
+        const data = await fetchGenres();
+        setGenres(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError("Failed to load genres");
+      }
+    };
 
+    loadGenres();
 
     if (game) {
       setForm({
@@ -32,11 +39,9 @@ export default function GameForm({ onClose, game }) {
         description: game.description || "",
         price: game.price || "",
         featured: game.featured || false,
-        genres: game.genres?.map(g => g.id) || []
+        genres: game.genres?.map((g) => g.id) || [],
       });
     }
-
-    return () => clearTimeout(toastTimerRef.current);
   }, [game]);
 
   const handleChange = (e) => {
@@ -53,34 +58,24 @@ export default function GameForm({ onClose, game }) {
     });
   };
 
-  const showToast = (msg) => {
-    const toastEl = toastRef.current;
-    if (!toastEl) return;
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => toastEl.classList.remove("show"), 2500);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
       if (game) {
-
         await api.put(`/games/${game.id}`, { ...form, price: Number(form.price) });
-        showToast("Game updated successfully!");
+        addToast("Game updated successfully!");
       } else {
-
         await api.post("/games", { ...form, price: Number(form.price) });
-        showToast("Game created successfully!");
+        addToast("Game created successfully!");
         setForm({ name: "", img: "", cover: "", description: "", price: "", featured: false, genres: [] });
       }
       onClose();
     } catch (err) {
       console.error(err);
       setError("Failed to save game.");
+      addToast("Failed to save game", "error");
     } finally {
       setLoading(false);
     }
@@ -89,66 +84,76 @@ export default function GameForm({ onClose, game }) {
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true">
       <form className="game-form-modern" onSubmit={handleSubmit}>
-        <h2>{game ? "Edit Game" : "Create New Game"}</h2>
+        <div className="form-header">
+          <h2>{game ? "Edit Game" : "Add New Game"}</h2>
+          <button type="button" className="close-x" onClick={onClose}>&times;</button>
+        </div>
+
         {error && <p className="error-box">{error}</p>}
 
-        <div className="form-group">
-          <label>Name</label>
-          <input name="name" value={form.name} onChange={handleChange} required />
-        </div>
-
-        <div className="form-group">
-          <label>Image URL</label>
-          <input name="img" value={form.img} onChange={handleChange} required />
-        </div>
-
-        <div className="form-group">
-          <label>Cover URL</label>
-          <input name="cover" value={form.cover} onChange={handleChange} required />
-        </div>
-
-        <div className="form-group">
-          <label>Description</label>
-          <textarea name="description" value={form.description} onChange={handleChange} required />
-        </div>
-
-        <div className="form-group-inline">
-          <div>
-            <label>Price</label>
-            <input type="number" name="price" value={form.price} onChange={handleChange} required />
+        <div className="form-scroll-area">
+          <div className="form-group">
+            <label>Game Title</label>
+            <input name="name" value={form.name} onChange={handleChange} placeholder="e.g. Cyberpunk 2077" required />
           </div>
 
-          <div className="checkbox-group">
-            <label>Featured</label>
-            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
-          </div>
-        </div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Thumbnail URL</label>
+              <input name="img" value={form.img} onChange={handleChange} placeholder="Direct link to image" required />
+            </div>
 
-        <div className="form-group">
-          <label>Genres</label>
-          <div className="genre-chip-container">
-            {genres.map(genre => (
-              <div
-                key={genre.id}
-                className={`genre-chip ${form.genres.includes(genre.id) ? "selected" : ""}`}
-                onClick={() => handleGenreToggle(genre.id)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleGenreToggle(genre.id); }}
-              >
-                {genre.name}
-              </div>
-            ))}
+            <div className="form-group">
+              <label>Banner URL</label>
+              <input name="cover" value={form.cover} onChange={handleChange} placeholder="Wide cover image" required />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Description</label>
+            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Tell us about the game..." required />
+          </div>
+
+          <div className="form-grid-3">
+            <div className="form-group">
+              <label>Price ($)</label>
+              <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="29.99" required />
+            </div>
+
+            <div className="form-group checkbox-group">
+              <label>
+                <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
+                <span>Featured Game</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Genres</label>
+            <div className="genre-chip-container">
+              {genres.map(genre => (
+                <div
+                  key={genre.id}
+                  className={`genre-chip ${form.genres.includes(genre.id) ? "selected" : ""}`}
+                  onClick={() => handleGenreToggle(genre.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleGenreToggle(genre.id); }}
+                >
+                  {genre.name}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="form-actions">
-          <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-          <button type="submit" className="modern-submit-btn">{loading ? "Saving..." : (game ? "Update Game" : "Create Game")}</button>
+          <button type="button" className="cancel-link" onClick={onClose}>Cancel</button>
+          <button type="submit" className="modern-submit-btn" disabled={loading}>
+            {loading ? "Processing..." : (game ? "Update Details" : "Publish Game")}
+          </button>
         </div>
       </form>
-
-      <div ref={toastRef} className="toast">Success!</div>
     </div>
   );
 }
