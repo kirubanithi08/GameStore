@@ -1,24 +1,30 @@
 import { useEffect, useState } from "react";
 import { fetchCart } from "../services/games";
+import { useAuth } from "../context/AuthContext";
 import "./Cart.css";
 
 function CartComponent() {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     const loadCart = async () => {
       try {
-        const res = await fetchCart();
-
+        const data = await fetchCart();
 
         const items =
-          res?.data?.content ??
-          res?.data ??
-          res ??
+          data?.content ??
+          data?.data ??
+          data ??
           [];
 
-        setCartItems(items);
+        setCartItems(Array.isArray(items) ? items : []);
       } catch (err) {
         console.error("Failed to load cart", err);
         setCartItems([]);
@@ -28,10 +34,10 @@ function CartComponent() {
     };
 
     loadCart();
-  }, []);
+  }, [user]);
 
-  if (loading) {
-    return <div className="cart-bar">Loading…</div>;
+  if (loading || !user || cartItems.length === 0) {
+    return null;
   }
 
   const totalItems = cartItems.reduce(
@@ -52,9 +58,14 @@ function CartComponent() {
 
   return (
     <div className="cart-bar">
-      <div>🛒 {totalItems} item{totalItems !== 1 && "s"}</div>
-      <div>Total: ${totalPrice.toFixed(2)}</div>
-      <button className="checkout-btn">Checkout</button>
+      <div className="cart-info">
+        <span className="cart-icon">🛒</span>
+        <div className="cart-details">
+          <span className="cart-count">{totalItems} Item{totalItems !== 1 && "s"}</span>
+          <span className="cart-total">Total: ${totalPrice.toFixed(2)}</span>
+        </div>
+      </div>
+      <button className="checkout-btn">Checkout Now</button>
     </div>
   );
 }

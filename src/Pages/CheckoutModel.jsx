@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../services/axios";
+import api from "../services/apiClient";
 import "./Checkout.css";
 
 export default function CheckoutModal({ gameId, onClose }) {
@@ -8,10 +8,15 @@ export default function CheckoutModal({ gameId, onClose }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    api
-      .get(`/games/${gameId}`)
-      .then((res) => setGame(res.data))
-      .catch(() => setError("Failed to load game"));
+    const fetchGame = async () => {
+      try {
+        const res = await api.get(`/games/${gameId}`);
+        setGame(res.data);
+      } catch (err) {
+        setError("Failed to load game");
+      }
+    };
+    fetchGame();
   }, [gameId]);
 
   const handlePayment = async () => {
@@ -45,45 +50,66 @@ export default function CheckoutModal({ gameId, onClose }) {
       >
         <button className="closeBtn" onClick={onClose}>✕</button>
 
-        <h1 className="checkoutTitle">Secure Checkout</h1>
-
-        <div className="gameSummary">
-          <img src={game.img} alt={game.name} />
-          <div>
-            <h2>{game.name}</h2>
-            <p className="price">${game.price}</p>
-          </div>
+        <div className="checkoutHeader">
+          <h1 className="checkoutTitle">Complete Your Purchase</h1>
+          <p className="checkoutSubtitle">Secure & Instant Delivery</p>
         </div>
 
-        <div className="paymentForm">
-          <label>Card Number</label>
-          <input value="4242 4242 4242 4242" disabled />
-
-          <div className="row">
-            <div>
-              <label>Expiry</label>
-              <input value="12/29" disabled />
+        <div className="checkoutBody">
+          <div className="gameSummary">
+            <div className="summaryImage">
+              <img src={game.img} alt={game.name} />
             </div>
-            <div>
-              <label>CVC</label>
-              <input value="123" disabled />
+            <div className="summaryText">
+              <h2>{game.name}</h2>
+              <span className="gameCategory">Digital Edition</span>
+            </div>
+            <div className="summaryPrice">
+              <span className="priceLabel">Total</span>
+              <p className="priceValue">${game.price}</p>
             </div>
           </div>
 
-          {error && <p className="errorText">{error}</p>}
+          <div className="paymentSection">
+            <div className="inputGroup">
+              <label>Card Number</label>
+              <div className="inputWrapper">
+                <span className="inputIcon">💳</span>
+                <input value="•••• •••• •••• 4242" disabled />
+              </div>
+            </div>
 
-          <button
-            className="payBtn"
-            onClick={handlePayment}
-            disabled={processing}
-          >
-            {processing ? "Processing..." : `Pay $${game.price}`}
-          </button>
+            <div className="inputRow">
+              <div className="inputGroup">
+                <label>Expiry</label>
+                <input value="12 / 29" disabled />
+              </div>
+              <div className="inputGroup">
+                <label>CVC</label>
+                <input value="•••" disabled />
+              </div>
+            </div>
+
+            {error && <div className="errorBadge">{error}</div>}
+
+            <button
+              className="payBtn"
+              onClick={handlePayment}
+              disabled={processing}
+            >
+              {processing ? (
+                <span className="loader">Processing...</span>
+              ) : (
+                <>Place Order — ${game.price}</>
+              )}
+            </button>
+          </div>
         </div>
 
-        <p className="disclaimer">
-          Demo checkout — no real payment is processed.
-        </p>
+        <div className="checkoutFooter">
+          <p className="secureNote">🔒 SSL Secured Checkout</p>
+          <p className="disclaimer">Demo environment — no actual charges will be made.</p>
+        </div>
       </div>
     </div>
   );
