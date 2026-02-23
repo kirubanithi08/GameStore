@@ -1,94 +1,107 @@
 import api from "./apiClient";
 
-const extractData = (res) => res?.data || res;
+const getPayload = (res) => res?.data;
+
 
 export const fetchGenres = async () => {
-    const response = await api.get("/genres");
-    return extractData(response.data);
+    const res = await api.get("/genres");
+    // return getPayload(res);
+    return res.data.data;
 };
 
 export const fetchFeaturedGames = async () => {
-    const response = await api.get("/games/featured");
-    return extractData(response.data);
+    const res = await api.get("/games/featured");
+    return getPayload(res.data);
 };
 
 export const fetchTrendingGames = async (limit = 5) => {
-    const response = await api.get(`/games/trending?limit=${limit}`);
-    return extractData(response.data);
+    const res = await api.get(`/games/trending?limit=${limit}`);
+    return getPayload(res.data);
 };
 
 export const fetchNewGames = async (limit = 4) => {
-    const response = await api.get(`/games/new?limit=${limit}`);
-    return extractData(response.data);
+    const res = await api.get(`/games/new?limit=${limit}`);
+    return getPayload(res.data);
 };
 
 export const searchGames = async (query) => {
-    const response = await api.get(`/games/search?query=${query}`);
-    return extractData(response.data);
+    const res = await api.get(`/games/search?query=${query}`);
+
+    console.log("api res:", res.data.data);
+    return getPayload(res.data);
 };
 
-export const fetchGames = async (page = 0, size = 12) => {
-    const response = await api.get(`/games?page=${page}&size=${size}`);
-    return extractData(response.data);
+
+export const fetchGames = async (page = 0, size = 10) => {
+    const res = await api.get(`/games?page=${page}&size=${size}`);
+
+    return res.data.data;
 };
 
 export const fetchGameById = async (id) => {
-    const response = await api.get(`/games/${id}`);
-    return extractData(response.data);
+    const res = await api.get(`/games/${id}`);
+    return getPayload(res.data);
 };
 
 export const deleteGame = async (id) => {
-    const response = await api.delete(`/games/${id}`);
-    return extractData(response.data);
+    const res = await api.delete(`/games/${id}`);
+    return getPayload(res.data);
 };
 
-export const fetchWishlist = async (page = 0, size = 12) => {
-    const response = await api.get(`/favorites?page=${page}&size=${size}`);
-    return extractData(response.data);
+
+export const fetchWishlist = async (page = 0, size = 10) => {
+    const res = await api.get(`/favorites?page=${page}&size=${size}`);
+    // return getPayload(res);
+    return res.data.data.content;
 };
 
 export const fetchCart = async (page = 0, size = 12) => {
-    const response = await api.get(`/cart?page=${page}&size=${size}`);
-    return extractData(response.data);
-};
+    const res = await api.get(`/cart?page=${page}&size=${size}`);
+    // return getPayload(res.data);
 
-// Cart & Wishlist Actions
-export const addToCart = async (id) => {
-    const response = await api.post(`/cart/${id}`);
-    return extractData(response.data);
-};
-
-export const removeFromCart = async (id) => {
-    const response = await api.delete(`/cart/${id}`);
-    return extractData(response.data);
-};
-
-export const checkCartExists = async (id) => {
-    const response = await api.get(`/cart/exists/${id}`);
-    return extractData(response.data);
-};
-
-export const addToWishlist = async (id) => {
-    const response = await api.post(`/favorites/${id}`);
-    return extractData(response.data);
-};
-
-export const removeFromWishlist = async (id) => {
-    const response = await api.delete(`/favorites/${id}`);
-    return extractData(response.data);
-};
-
-export const checkWishlistExists = async (id) => {
-    const response = await api.get(`/favorites/exists/${id}`);
-    return extractData(response.data);
-};
-
-export const checkPurchaseExists = async (id) => {
-    const response = await api.get(`/purchase/exists/${id}`);
-    return extractData(response.data);
+    return res.data.data.content;
 };
 
 export const fetchBuys = async (page = 0, size = 12) => {
-    const response = await api.get(`/purchase?page=${page}&size=${size}`);
-    return extractData(response.data);
+    const res = await api.get(`/purchase?page=${page}&size=${size}`);
+    // return getPayload(res.data);
+
+    return res.data.data.content;
+};
+
+
+export const addToCart = async (id) => {
+    const res = await api.post(`/cart/${id}`);
+    return getPayload(res.data);
+};
+
+export const removeFromCart = async (id) => {
+    const res = await api.delete(`/cart/${id}`);
+    return getPayload(res.data);
+};
+
+export const checkCartExists = async (id) => {
+    const res = await api.get(`/cart/exists/${id}`);
+    return getPayload(res.data);
+};
+
+export const addToWishlist = async (id) => {
+    const res = await api.post(`/favorites/${id}`);
+    return getPayload(res.data);
+};
+
+export const removeFromWishlist = async (id) => {
+    const res = await api.delete(`/favorites/${id}`);
+    return getPayload(res.data);
+};
+
+export const checkWishlistExists = async (id) => {
+    const res = await api.get(`/favorites/exists/${id}`);
+    console.log();
+    return getPayload(res.data);
+};
+
+export const checkPurchaseExists = async (id) => {
+    const res = await api.get(`/purchase/exists/${id}`);
+    return getPayload(res.data);
 };

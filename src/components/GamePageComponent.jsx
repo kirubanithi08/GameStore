@@ -26,7 +26,6 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
   const [genre, setGenre] = useState("ALL");
 
 
-
   const formatGame = (item) => {
     const g = item.game || item;
 
@@ -37,14 +36,12 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
       cover: g.cover,
       description: g.description,
       price: `$${g.price}`,
-      // genre: g.genres?.map((x) => x.name) ?? [],
-      genre: g.genres?.map(x => typeof x === "string" ? x : x.name) ?? [],
-
+      genre: g.genres?.map((x) =>
+        typeof x === "string" ? x : x.name
+      ) ?? [],
       wishlisted: !!item.game,
     };
   };
-
-
 
 
   const isPublicSection =
@@ -53,38 +50,46 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     sectionName?.toLowerCase().includes("home") ||
     sectionName?.toLowerCase().includes("search");
 
-  useEffect(() => {
-    if (isPublicSection || user) {
-      loadGames();
-    } else {
-      setLoading(false);
-    }
-  }, [page, searchQuery, user, sectionName]);
 
   const loadGames = async () => {
     setLoading(true);
+
     try {
       const data = await fetchGames(page, PAGE_SIZE);
 
-
-      const rawData = data?.content || data?.data?.content || data?.data || data;
-      const content = Array.isArray(rawData) ? rawData : [];
-      const totalPagesVal = data?.totalPages || data?.data?.totalPages || 1;
+      const content = Array.isArray(data) ? data : [];
 
       if (content.length === 0) {
-        console.warn(`GamePageComponent: No games found for section "${sectionName}". Public: ${isPublicSection}, User: ${!!user}`);
+        console.warn("No games found:", {
+          sectionName,
+          isPublicSection,
+          userLoggedIn: !!user,
+        });
       }
 
       setGames(content.map(formatGame));
-      setTotalPages(totalPagesVal);
+
+
+      setTotalPages(1);
     } catch (err) {
-      console.error(`GamePageComponent: Failed to load ${sectionName}:`, err);
+      console.error("Failed to load games:", err);
       setGames([]);
     } finally {
       setLoading(false);
     }
   };
 
+
+  useEffect(() => {
+    if (!isPublicSection && authLoading) return;
+
+    if (!isPublicSection && !user) {
+      setLoading(false);
+      return;
+    }
+
+    loadGames();
+  }, [page, user, authLoading, sectionName]);
 
 
   const handleSearch = async (text) => {
@@ -97,12 +102,16 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
     }
 
     setLoading(true);
+
     try {
       const data = await searchGames(text);
-      const content = data?.content ?? data?.data ?? data ?? [];
-      setSearchResults((Array.isArray(content) ? content : []).map(formatGame));
+
+      console.log("Search Response:", data);
+
+      const content = Array.isArray(data) ? data : [];
+      setSearchResults(content.map(formatGame));
     } catch (err) {
-      console.error("Search failed", err);
+      console.error("Search failed:", err);
       setSearchResults([]);
     } finally {
       setLoading(false);
@@ -115,8 +124,15 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
   );
 
 
+  if (authLoading) {
+    return (
+      <div className="gamesPage">
+        <h1>{sectionName}</h1>
+        <div className="loader">Loading...</div>
+      </div>
+    );
+  }
 
-  if (authLoading) return <div className="gamesPage"><h1>{sectionName}</h1><div className="loader">Loading...</div></div>;
 
   return (
     <div className="gamesPage">
@@ -125,7 +141,10 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
       {!user && !isPublicSection ? (
         <div className="auth-placeholder">
           <p>Please login to view your {sectionName.toLowerCase()}.</p>
-          <button className="login-btn-placeholder" onClick={() => setShowLogin(true)}>
+          <button
+            className="login-btn-placeholder"
+            onClick={() => setShowLogin(true)}
+          >
             Login to Account
           </button>
         </div>
@@ -148,22 +167,27 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
           </div>
 
           <div className="gamesGrid">
-            {loading
-              ? Array.from({ length: PAGE_SIZE }).map((_, i) => (
+            {loading ? (
+              Array.from({ length: PAGE_SIZE }).map((_, i) => (
                 <GameCardSkeleton key={i} />
               ))
-              : listToShow.length > 0
-                ? listToShow.map((g) => <GameCard key={g.id} game={g} />)
-                : (
-                  <div className="empty-placeholder">
-                    <p>No games found in this section.</p>
-                  </div>
-                )}
+            ) : listToShow.length > 0 ? (
+              listToShow.map((g) => (
+                <GameCard key={g.id} game={g} />
+              ))
+            ) : (
+              <div className="empty-placeholder">
+                <p>No games found in this section.</p>
+              </div>
+            )}
           </div>
 
           {!searchQuery && !loading && games.length > 0 && (
             <div className="pagination">
-              <button disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+              <button
+                disabled={page === 0}
+                onClick={() => setPage((p) => p - 1)}
+              >
                 {"<"}
               </button>
 
