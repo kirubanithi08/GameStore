@@ -59,13 +59,13 @@ export default function GamePageComponent({ sectionName, fetchGames }) {
 
       const content = Array.isArray(data) ? data : [];
 
-      if (content.length === 0) {
-        console.warn("No games found:", {
-          sectionName,
-          isPublicSection,
-          userLoggedIn: !!user,
-        });
-      }
+      // if (content.length === 0) {
+      //   console.warn("No games found:", {
+      //     sectionName,
+      //     isPublicSection,
+      //     userLoggedIn: !!user,
+      //   });
+      // }
 
       setGames(content.map(formatGame));
 

@@ -121,7 +121,7 @@ export default function GameCard({ game }) {
           <h3 title={title}>{title}</h3>
 
           <div className="mgc-tags">
-            {genre.slice(0, 2).map((g) => (
+            {genre.slice(0, 3).map((g) => (
               <span className="mgc-tag" key={g}>
                 {g}
               </span>
