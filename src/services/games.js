@@ -26,9 +26,7 @@ export const fetchNewGames = async (limit = 4) => {
 
 export const searchGames = async (query) => {
     const res = await api.get(`/games/search?query=${query}`);
-
-    console.log("api res:", res.data.data);
-    return getPayload(res.data);
+    return getPayload(res);
 };
 
 
@@ -97,7 +95,6 @@ export const removeFromWishlist = async (id) => {
 
 export const checkWishlistExists = async (id) => {
     const res = await api.get(`/favorites/exists/${id}`);
-    console.log();
     return getPayload(res.data);
 };
 
